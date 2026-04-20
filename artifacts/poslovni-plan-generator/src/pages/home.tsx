@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { jsPDF } from "jspdf";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -50,13 +51,13 @@ const TEMPLATES = [
 
 const LOADING_STEPS = [
   "Računam tabele i finansijske pokazatelje...",
-  "AI generiše opisni deo i tržišnu analizu...",
-  "Pripremam dokumente za preuzimanje...",
+  "Generišem profesionalni opisni deo...",
+  "Pripremam Excel, Word i PDF dokumente...",
 ];
 
 const initialForm: FormState = {
   brojKazana: 2,
-  cenaPoKazanu: 1425000,
+  cenaPoKazanu: 3029108,
   sopstveniIzvori: 50,
   tudjiIzvori: 50,
   prodajnaCena: 3000,
@@ -65,44 +66,44 @@ const initialForm: FormState = {
   prodajaGodina3: 7800,
   prodajaGodina4: 7800,
   prodajaGodina5: 7800,
-  sirovina: 2100000,
-  ambalaza: 760000,
-  potrosniMaterijal: 180000,
-  ostaliMaterijal: 95000,
-  elektricnaEnergija: 240000,
-  vodaIKanalizacija: 70000,
-  internet: 60000,
-  komunalniTroskovi: 85000,
-  odrzavanjeOpreme: 160000,
-  odrzavanjeObjekta: 120000,
-  reklama: 220000,
-  transport: 300000,
-  proizvodneUsluge: 180000,
-  radnaSnaga: 2160000,
-  bankarskeUsluge: 90000,
-  administrativniTroskovi: 140000,
-  konsultantskeUsluge: 250000,
+  sirovina: 5100000,
+  ambalaza: 1560000,
+  potrosniMaterijal: 320000,
+  ostaliMaterijal: 180000,
+  elektricnaEnergija: 420000,
+  vodaIKanalizacija: 96000,
+  internet: 72000,
+  komunalniTroskovi: 110000,
+  odrzavanjeOpreme: 260000,
+  odrzavanjeObjekta: 180000,
+  reklama: 360000,
+  transport: 540000,
+  proizvodneUsluge: 280000,
+  radnaSnaga: 3240000,
+  bankarskeUsluge: 120000,
+  administrativniTroskovi: 210000,
+  konsultantskeUsluge: 300000,
   stopaAmortizacije: 10,
-  trzisteNapomene: "Prodaja kroz lokalne prodavnice, ugostiteljske objekte, sajmove hrane i direktno kupcima u regionu Vojvodine.",
-  planNapomene: "Planirana je nabavka dva kazana, uređenje prostora za fermentaciju i postepeno brendiranje domaće rakije od šljive.",
+  trzisteNapomene: "Kupci su lokalne prodavnice, restorani, ugostiteljski objekti, specijalizovane radnje domaće hrane i krajnji kupci koji traže kvalitetnu rakiju poznatog porekla. Planira se postepen ulazak u prodajne kanale u Vojvodini i Beogradu.",
+  planNapomene: "Investicija obuhvata dva kazana, prateću opremu, pripremu prostora, standardizaciju procesa i osnovno brendiranje proizvoda. Plan je da se proizvodnja vodi kontrolisano, uz jasno označeno poreklo šljive i stabilan kvalitet gotovog proizvoda.",
 };
 
 const costFields: Array<{ key: keyof FormState; label: string }> = [
   { key: "sirovina", label: "Sirovina (šljiva)" },
-  { key: "ambalaza", label: "Ambalaza (flaše, čepovi, etikete)" },
-  { key: "potrosniMaterijal", label: "Potrošni materijal (kvasci, higijena)" },
+  { key: "ambalaza", label: "Ambalaza" },
+  { key: "potrosniMaterijal", label: "Potrošni materijal" },
   { key: "ostaliMaterijal", label: "Ostali materijal" },
   { key: "elektricnaEnergija", label: "Električna energija" },
   { key: "vodaIKanalizacija", label: "Voda i kanalizacija" },
   { key: "internet", label: "Internet i telekomunikacije" },
-  { key: "komunalniTroskovi", label: "Ostali komunalni troškovi" },
+  { key: "komunalniTroskovi", label: "Ostali komunalni" },
   { key: "odrzavanjeOpreme", label: "Održavanje opreme" },
   { key: "odrzavanjeObjekta", label: "Održavanje objekta" },
   { key: "reklama", label: "Reklama i marketing" },
   { key: "transport", label: "Transport i distribucija" },
-  { key: "proizvodneUsluge", label: "Ostale proizvodne usluge" },
+  { key: "proizvodneUsluge", label: "Ostale usluge" },
   { key: "radnaSnaga", label: "Radna snaga (3 radnika)" },
-  { key: "bankarskeUsluge", label: "Bankarske usluge i provizije" },
+  { key: "bankarskeUsluge", label: "Bankarske usluge" },
   { key: "administrativniTroskovi", label: "Administrativni troškovi" },
   { key: "konsultantskeUsluge", label: "Konsultantske usluge" },
 ];
@@ -114,6 +115,8 @@ function buildPlanText(form: FormState, totalInvestment: number, annualCosts: nu
   const ownFunds = totalInvestment * (form.sopstveniIzvori / 100);
   const borrowedFunds = totalInvestment * (form.tudjiIzvori / 100);
   const grossProfit = yearlyRevenue - annualCosts - amortization;
+  const fiveYearSales = form.prodajaGodina1 + form.prodajaGodina2 + form.prodajaGodina3 + form.prodajaGodina4 + form.prodajaGodina5;
+  const fiveYearRevenue = fiveYearSales * form.prodajnaCena;
   const payback = grossProfit > 0 ? totalInvestment / grossProfit : 0;
 
   return `Poslovni Plan Generator - Za poljoprivrednike Vojvodine
@@ -121,66 +124,82 @@ function buildPlanText(form: FormState, totalInvestment: number, annualCosts: nu
 PREGLED GENERISANOG SADRŽAJA
 
 1. Rezime poslovnog plana
-Ovaj poslovni plan prikazuje opravdanost ulaganja u proizvodnju rakije od šljive na porodičnom poljoprivrednom gazdinstvu u Vojvodini. Planirana investicija obuhvata nabavku ${form.brojKazana} kazana, prateće opreme i osnovnih uslova za stabilnu proizvodnju. Ukupna vrednost investicije iznosi ${formatRsd(totalInvestment)}, od čega sopstveni izvori učestvuju sa ${form.sopstveniIzvori}% (${formatRsd(ownFunds)}), a tuđi izvori sa ${form.tudjiIzvori}% (${formatRsd(borrowedFunds)}).
+Predmet ovog poslovnog plana je procena ekonomske opravdanosti ulaganja u proizvodnju rakije od šljive na porodičnom poljoprivrednom gazdinstvu u Vojvodini. Projekat se zasniva na nabavci ${form.brojKazana} kazana za destilaciju i organizovanju stabilnog procesa prerade kvalitetne šljive u finalni proizvod više dodate vrednosti. Ukupna vrednost investicije iznosi ${formatRsd(totalInvestment)}, što obuhvata osnovnu proizvodnu opremu, prateće elemente procesa, pripremu prostora i troškove pokretanja proizvodnje.
 
-2. Analiza tržišta
-Potražnja za kvalitetnim domaćim voćnim rakijama ostaje stabilna, posebno za proizvodima sa jasnim poreklom sirovine, kontrolisanim procesom proizvodnje i profesionalnom ambalažom. Planirani proizvod je namenjen kupcima koji prepoznaju vrednost lokalne proizvodnje, ugostiteljskim objektima, manjim prodavnicama domaće hrane i direktnoj prodaji na gazdinstvu. ${form.trzisteNapomene}
+Planirani model finansiranja predviđa učešće sopstvenih sredstava od ${form.sopstveniIzvori}% ili ${formatRsd(ownFunds)}, dok se preostali deo od ${form.tudjiIzvori}% ili ${formatRsd(borrowedFunds)} finansira iz tuđih izvora. U prvoj godini planirana je prodaja ${formatNumber(form.prodajaGodina1)} litara, dok se od druge godine očekuje stabilizacija na nivou od ${formatNumber(form.prodajaGodina2)} litara godišnje. Prodajna cena je projektovana na ${formatRsd(form.prodajnaCena)} po litru, što stvara osnov za pozitivne finansijske efekte i održiv razvoj gazdinstva.
 
-3. Proizvodnja i prodaja
-Prodajna cena po litru planirana je na nivou od ${formatRsd(form.prodajnaCena)}. Obim prodaje predviđen je u petogodišnjem periodu: Godina I ${formatNumber(form.prodajaGodina1)} litara, Godina II ${formatNumber(form.prodajaGodina2)} litara, Godina III ${formatNumber(form.prodajaGodina3)} litara, Godina IV ${formatNumber(form.prodajaGodina4)} litara i Godina V ${formatNumber(form.prodajaGodina5)} litara. Očekivani prihod u prvoj godini iznosi ${formatRsd(yearlyRevenue)}.
+2. Osnovni podaci
+Gazdinstvo posluje u sektoru prerade voća i proizvodnje alkoholnih pića tradicionalnog karaktera. Osnovna delatnost projekta jeste proizvodnja rakije od šljive namenjene domaćem tržištu, sa naglaskom na kontrolisano poreklo sirovine, standardizovan kvalitet i profesionalno pakovanje. Projekat je koncipiran kao realan razvojni korak za poljoprivredno gazdinstvo koje želi da poveća vrednost primarne proizvodnje i smanji zavisnost od prodaje sirovog voća.
 
-4. Finansijski pokazatelji
-Ukupni godišnji troškovi proizvodnje, rada, ambalaže, održavanja, marketinga, transporta i administracije procenjuju se na ${formatRsd(annualCosts)}. Godišnja amortizacija pri stopi od ${form.stopaAmortizacije}% iznosi ${formatRsd(amortization)}. Očekivani rezultat pre poreza u prvoj godini iznosi približno ${formatRsd(grossProfit)}. Procena roka povraćaja investicije je ${payback > 0 ? payback.toFixed(1) : "nije moguće izračunati"} godina.
+Lokacija proizvodnje nalazi se u poljoprivrednom području pogodnom za nabavku šljive i angažovanje lokalne radne snage. Prednost ovakve lokacije ogleda se u dostupnosti sirovine, nižim logističkim troškovima, poznavanju lokalnog tržišta i mogućnosti direktne saradnje sa voćarima. Planirano je da se proizvodnja razvija postepeno, uz poštovanje svih zakonskih i sanitarnih uslova relevantnih za ovu vrstu delatnosti.
 
-5. Plan realizacije investicije
-Realizacija investicije planirana je kroz nabavku kazana, pripremu prostora, probnu proizvodnju i organizaciju redovne prodaje. Posebna pažnja biće usmerena na kvalitet sirovine, higijenu proizvodnog procesa, pravilno skladištenje i standardizaciju proizvoda. ${form.planNapomene}
+3. Opis sadašnjeg stanja
+U postojećem stanju gazdinstvo raspolaže osnovnim iskustvom u poljoprivrednoj proizvodnji i pristupom sirovinskoj bazi, ali nema dovoljno savremene opreme za ozbiljniju i tržišno konkurentnu proizvodnju rakije. Prodaja sirove šljive često zavisi od sezonskih cena i otkupnih uslova, što ograničava mogućnost stabilnog planiranja prihoda. Zbog toga se ulaganje u preradu posmatra kao način da se poveća dodata vrednost proizvoda i obezbedi veća kontrola nad plasmanom.
 
-6. Očekivani efekti
-Projekat doprinosi povećanju dodate vrednosti sopstvene šljive, stabilizaciji prihoda gazdinstva i stvaranju prepoznatljivog proizvoda za lokalno i regionalno tržište. Ulaganje omogućava bolju iskorišćenost postojećih resursa, povećanje konkurentnosti i dugoročnu održivost porodičnog poljoprivrednog gazdinstva.`;
+Postojeće stanje karakteriše potreba za jasnijom organizacijom procesa, definisanjem troškova, unapređenjem kapaciteta i uspostavljanjem profesionalnijeg nastupa prema tržištu. Nabavkom kazana i prateće opreme gazdinstvo dobija osnov za organizovanu proizvodnju, bolju iskorišćenost sirovine i stvaranje proizvoda koji se može prodavati pod sopstvenim identitetom.
+
+4. Podaci o investiciji
+Investicija obuhvata nabavku ${form.brojKazana} kazana po ceni od ${formatRsd(form.cenaPoKazanu)} sa PDV-om, odnosno ukupnu vrednost nabavke od ${formatRsd(totalInvestment)}. Nabavna vrednost kazana koristi se kao osnovica za obračun amortizacije, a planirana stopa amortizacije iznosi ${form.stopaAmortizacije}% godišnje. Godišnji iznos amortizacije procenjen je na ${formatRsd(amortization)}, što je uključeno u ukupnu ocenu finansijskih efekata.
+
+Investicija je usmerena na povećanje proizvodnog kapaciteta, unapređenje kvaliteta i stvaranje uslova za redovan plasman proizvoda. Nabavka opreme predstavlja ključni preduslov za stabilan proces destilacije, bolju kontrolu kvaliteta i ponovljivost proizvodnje iz godine u godinu. Očekuje se da će oprema biti korišćena u dužem periodu, uz redovno održavanje i plansko korišćenje kapaciteta.
+
+5. Potrebna radna snaga
+Za realizaciju projekta predviđeno je angažovanje tri radnika u okviru proizvodnog procesa. Radna snaga je potrebna za prijem i pripremu sirovine, kontrolu fermentacije, destilaciju, skladištenje, pakovanje i osnovne aktivnosti distribucije. Godišnji trošak radne snage procenjen je na ${formatRsd(form.radnaSnaga)}, što uključuje planirani nivo angažovanja potreban za redovno funkcionisanje proizvodnje.
+
+Pored direktnog rada u proizvodnji, deo aktivnosti odnosi se na administraciju, komunikaciju sa kupcima, pripremu dokumentacije i praćenje prodaje. U početnoj fazi očekuje se veće angažovanje nosioca gazdinstva u organizaciji i nadzoru procesa, dok se u kasnijim godinama može planirati jasnija podela zaduženja i dodatna obuka zaposlenih.
+
+6. Distribucija i promocija
+Prodaja će se organizovati kroz više kanala kako bi se smanjio rizik zavisnosti od jednog kupca ili jednog tržišnog pravca. Planirani kanali prodaje obuhvataju direktnu prodaju na gazdinstvu, saradnju sa lokalnim prodavnicama, ugostiteljskim objektima, specijalizovanim radnjama domaće hrane i nastup na sajmovima. Poseban značaj ima izgradnja poverenja kod kupaca kroz stabilan kvalitet, jasnu deklaraciju i dosledan vizuelni identitet proizvoda.
+
+Promotivne aktivnosti uključuju izradu etikete, osnovni vizuelni identitet, prisustvo na lokalnim manifestacijama, preporuke postojećih kupaca i ciljanu komunikaciju sa ugostiteljima. Godišnji trošak reklame i marketinga projektovan je na ${formatRsd(form.reklama)}, dok je za transport i distribuciju predviđeno ${formatRsd(form.transport)}. ${form.trzisteNapomene}
+
+7. Očekivani efekti
+Očekivani efekti investicije ogledaju se u rastu prihoda gazdinstva, većoj dodatoj vrednosti primarne proizvodnje i stabilnijem poslovanju u odnosu na prodaju sirovine. Projekat omogućava da se deo poljoprivredne proizvodnje pretvori u finalni proizvod sa prepoznatljivim poreklom i višom tržišnom vrednošću. Time se povećava otpornost gazdinstva na promene otkupnih cena i sezonske poremećaje.
+
+Pored finansijskih efekata, investicija doprinosi očuvanju lokalne proizvodnje, angažovanju radne snage i razvoju ruralne ekonomije. Proizvodnja rakije od šljive ima snažan tradicionalni karakter, ali se kroz profesionalniji pristup može pozicionirati kao kvalitetan komercijalni proizvod. ${form.planNapomene}
+
+8. Finansijski plan
+U prvoj godini planirana prodaja iznosi ${formatNumber(form.prodajaGodina1)} litara, uz prodajnu cenu od ${formatRsd(form.prodajnaCena)} po litru, što daje očekivani prihod od ${formatRsd(yearlyRevenue)}. Ukupna projektovana prodaja za pet godina iznosi ${formatNumber(fiveYearSales)} litara, dok ukupni prihodi za isti period iznose približno ${formatRsd(fiveYearRevenue)}. Godišnji troškovi proizvodnje i poslovanja procenjeni su na ${formatRsd(annualCosts)}.
+
+Najveće troškovne stavke čine sirovina u iznosu od ${formatRsd(form.sirovina)}, radna snaga u iznosu od ${formatRsd(form.radnaSnaga)}, ambalaža u iznosu od ${formatRsd(form.ambalaza)}, kao i transport, marketing, održavanje i administrativni troškovi. Nakon uključivanja amortizacije od ${formatRsd(amortization)}, procenjeni rezultat prve godine iznosi ${formatRsd(grossProfit)}. Ovakva struktura pokazuje da je projekat osetljiv na prodajnu cenu, obim prodaje i cenu sirovine, ali ima prostor za pozitivan poslovni rezultat uz planirani plasman.
+
+9. Ocena efekata
+Finansijska ocena ukazuje da projekat ima potencijal da obezbedi održiv prihod ukoliko se ostvari planirani obim prodaje i kontrola troškova. Rok povraćaja investicije procenjuje se na ${payback > 0 ? `${payback.toFixed(1)} godina` : "period koji zavisi od povećanja prodaje i smanjenja troškova"}. Posebno je značajno što se investicija odnosi na opremu dugoročnog karaktera, koja može stvarati koristi tokom više proizvodnih ciklusa.
+
+Ekonomski efekti nisu ograničeni samo na direktnu dobit, već uključuju povećanje tržišne vrednosti gazdinstva, razvoj sopstvenog proizvoda i mogućnost širenja asortimana. Projekat se ocenjuje kao realan i razvojno opravdan, pod uslovom da se obezbedi dosledan kvalitet proizvoda, uredna dokumentacija i aktivan pristup tržištu.
+
+10. Potencijalni rizici
+Ključni rizici projekta odnose se na promene cena sirovine, variranje kvaliteta roda šljive, promene tražnje, konkurenciju i moguće kašnjenje u razvoju prodajnih kanala. Dodatni rizik predstavlja potreba za poštovanjem propisa u oblasti proizvodnje i prometa alkoholnih pića, zbog čega je neophodno blagovremeno obezbediti svu potrebnu dokumentaciju i stručnu podršku.
+
+Mere za smanjenje rizika uključuju ugovaranje nabavke sirovine sa više dobavljača, kontrolu kvaliteta u svim fazama proizvodnje, plansko održavanje opreme, postepenu izgradnju brenda i diverzifikaciju prodaje. Važno je da gazdinstvo ne zavisi samo od jednog kanala plasmana, već da razvija kombinaciju direktne prodaje, maloprodaje, ugostiteljstva i sajamskog nastupa.
+
+11. Zaključna ocena
+Na osnovu prikazanih ulaznih podataka, projektovanih prihoda, troškova i očekivanih efekata, investicija u proizvodnju rakije od šljive ocenjuje se kao profesionalno utemeljen i ekonomski opravdan razvojni projekat. Ukupna vrednost ulaganja od ${formatRsd(totalInvestment)} je značajna, ali je povezana sa opremom koja omogućava dugoročnu proizvodnju i stvaranje proizvoda veće dodate vrednosti.
+
+Projekat je posebno pogodan za poljoprivredno gazdinstvo koje želi da smanji zavisnost od prodaje sirovine i izgradi sopstveni tržišni proizvod. Uz odgovorno upravljanje, kontrolu troškova i aktivan rad na prodaji, poslovni plan pokazuje realnu osnovu za stabilan prihod, razvoj gazdinstva i jačanje pozicije na tržištu domaćih poljoprivredno-prehrambenih proizvoda.`;
 }
 
-function splitWrappedLines(context: CanvasRenderingContext2D, text: string, maxWidth: number) {
-  const result: string[] = [];
+function wrapCanvasLines(context: CanvasRenderingContext2D, text: string, maxWidth: number) {
+  const lines: string[] = [];
   text.split("\n").forEach((paragraph) => {
     if (!paragraph.trim()) {
-      result.push("");
+      lines.push("");
       return;
     }
     const words = paragraph.split(" ");
     let line = "";
     words.forEach((word) => {
-      const testLine = line ? `${line} ${word}` : word;
-      if (context.measureText(testLine).width > maxWidth && line) {
-        result.push(line);
+      const test = line ? `${line} ${word}` : word;
+      if (context.measureText(test).width > maxWidth && line) {
+        lines.push(line);
         line = word;
       } else {
-        line = testLine;
+        line = test;
       }
     });
-    if (line) result.push(line);
+    if (line) lines.push(line);
   });
-  return result;
-}
-
-function binaryStringToBytes(value: string) {
-  const bytes = new Uint8Array(value.length);
-  for (let i = 0; i < value.length; i += 1) bytes[i] = value.charCodeAt(i) & 255;
-  return bytes;
-}
-
-function asciiBytes(value: string) {
-  return new TextEncoder().encode(value);
-}
-
-function concatBytes(parts: Uint8Array[]) {
-  const total = parts.reduce((sum, part) => sum + part.length, 0);
-  const output = new Uint8Array(total);
-  let offset = 0;
-  parts.forEach((part) => {
-    output.set(part, offset);
-    offset += part.length;
-  });
-  return output;
+  return lines;
 }
 
 function createPdfFromText(text: string) {
@@ -190,19 +209,20 @@ function createPdfFromText(text: string) {
   const context = canvas.getContext("2d");
   if (!context) return null;
 
-  context.font = "30px Arial";
-  const lines = splitWrappedLines(context, text, 1080);
-  const pages: Uint8Array[] = [];
+  context.font = "28px Arial";
+  const lines = wrapCanvasLines(context, text, 1080);
+  const pdf = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
   let lineIndex = 0;
+  let page = 0;
 
   while (lineIndex < lines.length) {
     context.fillStyle = "#ffffff";
     context.fillRect(0, 0, canvas.width, canvas.height);
     context.fillStyle = "#166534";
-    context.font = "bold 36px Arial";
+    context.font = "bold 38px Arial";
     context.fillText("Poslovni Plan Generator", 80, 85);
     context.fillStyle = "#854d0e";
-    context.font = "24px Arial";
+    context.font = "25px Arial";
     context.fillText("Demo poslovni plan za proizvodnju rakije od šljive", 80, 125);
     context.strokeStyle = "#15803d";
     context.lineWidth = 3;
@@ -211,67 +231,23 @@ function createPdfFromText(text: string) {
     context.lineTo(1160, 150);
     context.stroke();
 
-    let y = 210;
-    while (lineIndex < lines.length && y < 1630) {
+    let y = 205;
+    while (lineIndex < lines.length && y < 1640) {
       const line = lines[lineIndex];
-      const isTitle = /^\d+\./.test(line) || line === "PREGLED GENERISANOG SADRŽAJA";
-      context.font = isTitle ? "bold 30px Arial" : "26px Arial";
-      context.fillStyle = isTitle ? "#15803d" : "#166534";
+      const title = /^\d+\./.test(line) || line === "PREGLED GENERISANOG SADRŽAJA";
+      context.font = title ? "bold 29px Arial" : "25px Arial";
+      context.fillStyle = title ? "#15803d" : "#166534";
       if (line) context.fillText(line, 80, y);
-      y += line ? 43 : 24;
+      y += line ? 40 : 22;
       lineIndex += 1;
     }
 
-    const image = canvas.toDataURL("image/jpeg", 0.95).split(",")[1];
-    pages.push(binaryStringToBytes(atob(image)));
+    if (page > 0) pdf.addPage();
+    pdf.addImage(canvas.toDataURL("image/jpeg", 0.96), "JPEG", 0, 0, 595.28, 841.89);
+    page += 1;
   }
 
-  const parts: Uint8Array[] = [];
-  const offsets: number[] = [0];
-  let position = 0;
-  const add = (part: Uint8Array) => {
-    parts.push(part);
-    position += part.length;
-  };
-  const addObject = (id: number, bodyParts: Uint8Array[]) => {
-    offsets[id] = position;
-    add(asciiBytes(`${id} 0 obj\n`));
-    bodyParts.forEach(add);
-    add(asciiBytes("\nendobj\n"));
-  };
-
-  add(asciiBytes("%PDF-1.4\n%\xE2\xE3\xCF\xD3\n"));
-  const pageObjectIds = pages.map((_, index) => 3 + index * 3);
-  const imageObjectIds = pages.map((_, index) => 4 + index * 3);
-  const contentObjectIds = pages.map((_, index) => 5 + index * 3);
-  const objectCount = 2 + pages.length * 3;
-
-  addObject(1, [asciiBytes("<< /Type /Catalog /Pages 2 0 R >>")]);
-  addObject(2, [asciiBytes(`<< /Type /Pages /Kids [${pageObjectIds.map((id) => `${id} 0 R`).join(" ")}] /Count ${pages.length} >>`)]);
-
-  pages.forEach((imageBytes, index) => {
-    const pageId = pageObjectIds[index];
-    const imageId = imageObjectIds[index];
-    const contentId = contentObjectIds[index];
-    const imageName = `Im${index + 1}`;
-    const content = `q\n595 0 0 842 0 0 cm\n/${imageName} Do\nQ`;
-
-    addObject(pageId, [asciiBytes(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /XObject << /${imageName} ${imageId} 0 R >> >> /Contents ${contentId} 0 R >>`)]);
-    addObject(imageId, [
-      asciiBytes(`<< /Type /XObject /Subtype /Image /Width 1240 /Height 1754 /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${imageBytes.length} >>\nstream\n`),
-      imageBytes,
-      asciiBytes("\nendstream"),
-    ]);
-    addObject(contentId, [asciiBytes(`<< /Length ${content.length} >>\nstream\n${content}\nendstream`)]);
-  });
-
-  const xrefOffset = position;
-  add(asciiBytes(`xref\n0 ${objectCount + 1}\n0000000000 65535 f \n`));
-  for (let i = 1; i <= objectCount; i += 1) {
-    add(asciiBytes(`${String(offsets[i]).padStart(10, "0")} 00000 n \n`));
-  }
-  add(asciiBytes(`trailer\n<< /Size ${objectCount + 1} /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`));
-  return new Blob([concatBytes(parts)], { type: "application/pdf" });
+  return pdf;
 }
 
 export default function Home() {
@@ -332,7 +308,8 @@ export default function Home() {
     setSelectedTemplate(null);
   };
 
-  const simulateDownload = () => {
+  const simulateDownload = (type: string) => {
+    console.log(`Simulirano preuzimanje: ${type}`);
     alert("Simulirano preuzimanje");
   };
 
@@ -342,27 +319,20 @@ export default function Home() {
       alert("PDF trenutno nije moguće generisati");
       return;
     }
-    const url = URL.createObjectURL(pdf);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "poslovni-plan-rakija-od-sljive.pdf";
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    URL.revokeObjectURL(url);
+    pdf.save("poslovni-plan-rakija-od-sljive.pdf");
   };
 
-  const numberInput = (key: keyof FormState, label: string, readOnly = false) => (
+  const numberInput = (key: keyof FormState, label: string) => (
     <div className="space-y-2">
       <Label htmlFor={String(key)}>{label}</Label>
-      <Input
-        id={String(key)}
-        type="number"
-        value={readOnly ? totalInvestment : (form[key] as number)}
-        onChange={(event) => updateNumber(key, event.target.value)}
-        readOnly={readOnly}
-        className="h-14 text-lg"
-      />
+      <Input id={String(key)} type="number" value={form[key] as number} onChange={(event) => updateNumber(key, event.target.value)} className="h-14 text-lg" />
+    </div>
+  );
+
+  const readOnlyInput = (id: string, label: string, value: number) => (
+    <div className="space-y-2">
+      <Label htmlFor={id}>{label}</Label>
+      <Input id={id} type="number" value={Math.round(value)} readOnly className="h-14 bg-primary/5 text-lg font-semibold text-primary" />
     </div>
   );
 
@@ -372,7 +342,7 @@ export default function Home() {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-primary">Poslovni Plan Generator - Za poljoprivrednike Vojvodine</h1>
-            <p className="text-sm text-foreground/70">Jednostavan demo alat za pripremu poslovnog plana</p>
+            <p className="text-sm text-foreground/70">Realističan demo za pripremu poslovnog plana iz Excel i Word podataka</p>
           </div>
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
@@ -408,7 +378,7 @@ export default function Home() {
               {TEMPLATES.map((template) => (
                 <Card key={template.id} className={`cursor-pointer bg-white shadow-sm transition-colors hover:shadow-md ${template.id === "rakija" ? "hover:border-primary/50" : "opacity-80 hover:border-accent/30"}`} onClick={() => handleTemplateSelect(template.id)}>
                   <CardHeader>
-                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary transition-transform group-hover:scale-110">
+                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
                       <FileText className="h-6 w-6" />
                     </div>
                     <CardTitle className="text-xl">{template.title}</CardTitle>
@@ -429,7 +399,7 @@ export default function Home() {
           <div className="mx-auto max-w-4xl animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="mb-8 flex flex-wrap items-center gap-4">
               <Button variant="outline" onClick={reset} size="sm">Nazad</Button>
-              <h2 className="text-2xl font-bold text-foreground">Unos podataka: {TEMPLATES.find((template) => template.id === selectedTemplate)?.title}</h2>
+              <h2 className="text-2xl font-bold text-foreground">Unos podataka: Rakija od šljive</h2>
             </div>
 
             <form onSubmit={handleGenerate} className="space-y-8 rounded-xl border border-border bg-white p-8 shadow-sm">
@@ -438,9 +408,9 @@ export default function Home() {
                 <div className="grid gap-4 md:grid-cols-2">
                   {numberInput("brojKazana", "Broj kazana")}
                   {numberInput("cenaPoKazanu", "Cena po kazanu sa PDV")}
-                  {numberInput("brojKazana", "Ukupna vrednost investicije", true)}
-                  {numberInput("sopstveniIzvori", "Sopstveni izvori %")}
-                  {numberInput("tudjiIzvori", "Tuđi izvori %")}
+                  {readOnlyInput("ukupnaInvesticija", "Ukupna vrednost investicije", totalInvestment)}
+                  {numberInput("sopstveniIzvori", "Sopstveni izvori (%)")}
+                  {numberInput("tudjiIzvori", "Tuđi izvori (%)")}
                 </div>
                 <div className="rounded-lg bg-primary/5 p-4 text-lg font-semibold text-primary">Ukupna vrednost investicije: {formatRsd(totalInvestment)}</div>
               </section>
@@ -448,19 +418,21 @@ export default function Home() {
               <section className="space-y-4">
                 <h3 className="border-b border-border pb-2 text-xl font-semibold text-primary">Proizvodnja i prodaja</h3>
                 <div className="grid gap-4 md:grid-cols-2">
-                  {numberInput("prodajnaCena", "Prodajna cena po litru (RSD)")}
-                  {numberInput("prodajaGodina1", "Godina I - Obim prodaje (litara)")}
-                  {numberInput("prodajaGodina2", "Godina II - Obim prodaje (litara)")}
-                  {numberInput("prodajaGodina3", "Godina III - Obim prodaje (litara)")}
-                  {numberInput("prodajaGodina4", "Godina IV - Obim prodaje (litara)")}
-                  {numberInput("prodajaGodina5", "Godina V - Obim prodaje (litara)")}
+                  {numberInput("prodajnaCena", "Prodajna cena po litru")}
+                  {numberInput("prodajaGodina1", "Godina I obim prodaje")}
+                  {numberInput("prodajaGodina2", "Godina II obim prodaje")}
+                  {numberInput("prodajaGodina3", "Godina III obim prodaje")}
+                  {numberInput("prodajaGodina4", "Godina IV obim prodaje")}
+                  {numberInput("prodajaGodina5", "Godina V obim prodaje")}
                 </div>
               </section>
 
               <section className="space-y-4">
                 <h3 className="border-b border-border pb-2 text-xl font-semibold text-primary">Troškovi godišnje</h3>
                 <div className="grid gap-4 md:grid-cols-2">
-                  {costFields.map((field) => numberInput(field.key, field.label))}
+                  {costFields.map((field) => (
+                    <div key={String(field.key)}>{numberInput(field.key, field.label)}</div>
+                  ))}
                 </div>
                 <div className="rounded-lg bg-accent/5 p-4 text-lg font-semibold text-accent">Ukupni godišnji troškovi: {formatRsd(annualCosts)}</div>
               </section>
@@ -468,24 +440,20 @@ export default function Home() {
               <section className="space-y-4">
                 <h3 className="border-b border-border pb-2 text-xl font-semibold text-primary">Amortizacija</h3>
                 <div className="grid gap-4 md:grid-cols-2">
-                  {numberInput("brojKazana", "Nabavna vrednost kazana", true)}
+                  {readOnlyInput("nabavnaVrednostKazana", "Nabavna vrednost kazana", totalInvestment)}
                   {numberInput("stopaAmortizacije", "Stopa amortizacije (%)")}
                 </div>
                 <div className="rounded-lg bg-primary/5 p-4 text-lg font-semibold text-primary">Godišnja amortizacija: {formatRsd(amortization)}</div>
               </section>
 
               <section className="space-y-4">
-                <h3 className="border-b border-border pb-2 text-xl font-semibold text-primary">Tržišna analiza</h3>
+                <h3 className="border-b border-border pb-2 text-xl font-semibold text-primary">Tržišna analiza i napomene</h3>
                 <div className="space-y-2">
                   <Label htmlFor="trzisteNapomene">Napomene za tržišnu analizu</Label>
                   <Textarea id="trzisteNapomene" value={form.trzisteNapomene} onChange={(event) => updateText("trzisteNapomene", event.target.value)} className="min-h-32 text-lg" />
                 </div>
-              </section>
-
-              <section className="space-y-4">
-                <h3 className="border-b border-border pb-2 text-xl font-semibold text-primary">Ostalo</h3>
                 <div className="space-y-2">
-                  <Label htmlFor="planNapomene">Napomene za plan</Label>
+                  <Label htmlFor="planNapomene">Opšte napomene za plan</Label>
                   <Textarea id="planNapomene" value={form.planNapomene} onChange={(event) => updateText("planNapomene", event.target.value)} className="min-h-32 text-lg" />
                 </div>
               </section>
@@ -523,10 +491,10 @@ export default function Home() {
                 <CheckCircle2 className="h-10 w-10 text-primary" />
               </div>
               <h2 className="mb-4 text-3xl font-bold text-foreground">Pregled generisanog sadržaja</h2>
-              <p className="mb-8 text-lg text-foreground/80">Dokumenti su uspešno pripremljeni za demo preuzimanje.</p>
+              <p className="mb-8 text-lg text-foreground/80">Dokumenti su pripremljeni za demo preuzimanje.</p>
               <div className="flex flex-wrap justify-center gap-4">
-                <Button size="lg" onClick={simulateDownload} className="h-14 min-w-[200px] bg-accent text-lg text-accent-foreground hover:bg-accent/90"><Download className="mr-2" /> Preuzmi Excel</Button>
-                <Button size="lg" onClick={simulateDownload} className="h-14 min-w-[200px] bg-primary text-lg text-primary-foreground hover:bg-primary/90"><Download className="mr-2" /> Preuzmi Word</Button>
+                <Button size="lg" onClick={() => simulateDownload("Excel")} className="h-14 min-w-[200px] bg-accent text-lg text-accent-foreground hover:bg-accent/90"><Download className="mr-2" /> Preuzmi Excel</Button>
+                <Button size="lg" onClick={() => simulateDownload("Word")} className="h-14 min-w-[200px] bg-primary text-lg text-primary-foreground hover:bg-primary/90"><Download className="mr-2" /> Preuzmi Word</Button>
                 <Button size="lg" onClick={downloadPdf} className="h-14 min-w-[200px] bg-primary text-lg text-primary-foreground hover:bg-primary/90"><Download className="mr-2" /> Preuzmi PDF</Button>
               </div>
             </div>

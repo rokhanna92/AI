@@ -18,7 +18,7 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 
 ## Artifacts
 
-- **Poslovni Plan Generator** (`artifacts/poslovni-plan-generator`): React + Vite + Tailwind single-page Serbian agriculture business plan generator demo. Frontend-only flow with template selection, detailed rakija od šljive investment/production/cost/amortization/market-analysis inputs, auto-calculated investment and financial summary values, mock AI API key settings, loading steps, generated Serbian business plan preview, simulated Excel/Word downloads, and real PDF download generation from the dummy plan text.
+- **Poslovni Plan Generator** (`artifacts/poslovni-plan-generator`): React + Vite + Tailwind single-page Serbian agriculture business plan generator demo. Frontend-only flow with template selection, detailed rakija od šljive investment/production/cost/amortization/market-analysis inputs, auto-calculated investment and financial summary values around a ~6.058M RSD sample investment, mock AI API key settings, loading steps, long formal 11-chapter Serbian business plan preview, simulated Excel/Word downloads, and jsPDF-based PDF generation from the full dummy plan text.
 
 ## Key Commands
 

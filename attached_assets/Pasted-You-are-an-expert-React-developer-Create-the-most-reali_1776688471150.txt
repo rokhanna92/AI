@@ -1,0 +1,84 @@
+You are an expert React developer. Create the most realistic possible demo for a Serbian agriculture business plan generator using Vite + React + Tailwind CSS.
+
+### Core Goal:
+Make this demo simulate the final product as closely as possible. The output should feel like a real professional business plan generated from the original Excel + Word files the user provided.
+
+### Design:
+- All text in Serbian (Latin script).
+- Calm Vojvodina farmer style: light green background (#f1f8f0), main green (#15803d), subtle brown (#854d0e), dark text (#166534).
+- Large, clean, professional UI with plenty of space.
+
+### Input Form (very detailed - match the original Excel):
+Title: "Unos podataka: Rakija od šljive"
+
+**Podaci o investiciji**
+- Broj kazana (default 2)
+- Cena po kazanu sa PDV
+- Ukupna vrednost investicije (auto-calculated)
+- Sopstveni izvori (%) (default 50)
+- Tuđi izvori (%) (default 50)
+
+**Proizvodnja i prodaja**
+- Prodajna cena po litru (default 3000)
+- Godina I obim prodaje (default 7000)
+- Godina II obim prodaje (default 7800)
+- Godina III obim prodaje (default 7800)
+- Godina IV obim prodaje (default 7800)
+- Godina V obim prodaje (default 7800)
+
+**Troškovi (all godišnje)**
+- Sirovina (šljiva)
+- Ambalaza
+- Potrošni materijal
+- Ostali materijal
+- Električna energija
+- Voda i kanalizacija
+- Internet i telekomunikacije
+- Ostali komunalni
+- Održavanje opreme
+- Održavanje objekta
+- Reklama i marketing
+- Transport i distribucija
+- Ostale usluge
+- Radna snaga (3 radnika)
+- Bankarske usluge
+- Administrativni troškovi
+- Konsultantske usluge
+
+**Amortizacija**
+- Nabavna vrednost kazana
+- Stopa amortizacije (%) (default 10)
+
+**Tržišna analiza i napomene**
+- Napomene za tržišnu analizu (textarea)
+- Opšte napomene za plan (textarea)
+
+Big green button: "Generiši poslovni plan"
+
+### Generation & Output (Simulate real end result):
+When button is clicked:
+- Show loading steps:
+  - "Računam tabele i finansijske pokazatelje..."
+  - "Generišem profesionalni opisni deo..."
+  - "Pripremam Excel, Word i PDF dokumente..."
+
+- Then show **Success Screen** titled "Pregled generisanog sadržaja"
+
+On the success screen:
+- Display a **long, professional dummy text** that is very close in style, length, and structure to the original Word document "15.8.7-Poslovni-plan-Majs doo.docx".
+  Include proper chapters: 1. Rezime poslovnog plana, 2. Osnovni podaci, 3. Opis sadašnjeg stanja, 4. Podaci o investiciji, 5. Potrebna radna snaga, 6. Distribucija i promocija, 7. Očekivani efekti, 8. Finansijski plan (with summary), 9. Ocena efekata, 10. Potencijalni rizici, 11. Zaključna ocena.
+- Use realistic numbers based on the original Excel (investment ~6.058.216 RSD, production 7000-7800 liters, etc.).
+- Make the text formal, detailed, and professional.
+
+**Download Buttons** (must work):
+- Preuzmi Excel → simulate download (alert + console.log)
+- Preuzmi Word → simulate download (alert + console.log)
+- Preuzmi PDF → **actually generate and download** a PDF that contains the full long dummy text shown on screen (use jsPDF).
+
+Make the dummy output text significantly longer and closer to the real Word document style (more paragraphs, more formal language, better structure).
+
+Keep the whole app simple but professional. Use Tailwind CSS.
+
+First show the project structure, then provide the full code for src/App.jsx and all components so it runs well on Replit.
+
+Start building the best possible demo.
