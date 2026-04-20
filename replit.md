@@ -16,6 +16,10 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 - **API codegen**: Orval (from OpenAPI spec)
 - **Build**: esbuild (CJS bundle)
 
+## Artifacts
+
+- **Poslovni Plan Generator** (`artifacts/poslovni-plan-generator`): React + Vite + Tailwind single-page Serbian agriculture business plan generator demo. Frontend-only flow with template selection, investment/production/cost/other inputs, mock AI API key settings, loading steps, and generated dummy Serbian business plan preview/download buttons.
+
 ## Key Commands
 
 - `pnpm run typecheck` — full typecheck across all packages
