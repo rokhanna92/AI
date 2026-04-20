@@ -1,0 +1,91 @@
+You are an expert React developer. Create a clean, simple, professional single-page web application using Vite + React + Tailwind CSS that serves as a realistic demo for a Serbian agriculture business plan generator.
+
+### Design & Language:
+- All text in Serbian (Latin script).
+- Color palette: Light green background (#f1f8f0), main green (#15803d), subtle brown accents (#854d0e), dark text (#166534). Calm Vojvodina farmer style.
+- Large, clear fonts, lots of white space, big buttons.
+
+### App Flow:
+1. **Template Selection**
+   - Header: "Poslovni Plan Generator - Za poljoprivrednike Vojvodine"
+   - Three big cards: 
+     - Rakija od šljive (main active one)
+     - Template 2 (placeholder)
+     - Template 3 (placeholder)
+
+2. **Detailed Input Form** (after selecting "Rakija od šljive")
+   - Title: "Unos podataka: Rakija od šljive"
+
+   **Podaci o investiciji**
+   - Broj kazana (number input, default 2)
+   - Cena po kazanu sa PDV (number input)
+   - Ukupna vrednost investicije (read-only, auto-calculated)
+   - Sopstveni izvori % (default 50)
+   - Tuđi izvori % (default 50)
+
+   **Proizvodnja i prodaja**
+   - Prodajna cena po litru (RSD) (default 3000)
+   - Godina I - Obim prodaje (litara) (default 7000)
+   - Godina II - Obim prodaje (litara) (default 7800)
+   - Godina III - Obim prodaje (litara) (default 7800)
+   - Godina IV - Obim prodaje (litara) (default 7800)
+   - Godina V - Obim prodaje (litara) (default 7800)
+
+   **Troškovi** (all godišnje)
+   - Sirovina (šljiva)
+   - Ambalaza (flaše, čepovi, etikete)
+   - Potrošni materijal (kvasci, higijena)
+   - Ostali materijal
+   - Električna energija
+   - Voda i kanalizacija
+   - Internet i telekomunikacije
+   - Ostali komunalni troškovi
+   - Održavanje opreme
+   - Održavanje objekta
+   - Reklama i marketing
+   - Transport i distribucija
+   - Ostale proizvodne usluge
+   - Radna snaga (3 radnika)
+   - Bankarske usluge i provizije
+   - Administrativni troškovi
+   - Konsultantske usluge
+
+   **Amortizacija**
+   - Nabavna vrednost kazana (read-only or editable)
+   - Stopa amortizacije (%) (default 10)
+
+   **Tržišna analiza**
+   - Napomene za tržišnu analizu (textarea) – korisnik može da upiše ključne informacije, a AI će kasnije generisati punu analizu tržišta
+
+   **Ostalo**
+   - Napomene za plan (textarea)
+
+3. **Generate Button**
+   - Big green button: "Generiši poslovni plan"
+
+4. **Generation Process**
+   - Loading steps in Serbian:
+     - "Računam tabele i finansijske pokazatelje..."
+     - "AI generiše opisni deo i tržišnu analizu..."
+     - "Pripremam dokumente za preuzimanje..."
+
+5. **Success Screen**
+   - Title: "Pregled generisanog sadržaja"
+   - Show realistic dummy Serbian text with proper business plan chapters
+   - Three large download buttons:
+     - Preuzmi Excel
+     - Preuzmi Word
+     - Preuzmi PDF   ← (must actually generate and download a PDF with the dummy text)
+   - Button: "Započni novi plan"
+
+### Demo Behavior:
+- All inputs are interactive and large.
+- On "Generiši" show loading, then success screen.
+- PDF button must create and download a real PDF containing the dummy generated text.
+- Other buttons can show alert("Simulirano preuzimanje").
+
+Keep the UI extremely simple, clean and professional. Use Tailwind CSS.
+
+First show the project structure, then give the full code for src/App.jsx and all components so it runs perfectly on Replit.
+
+Start building.
