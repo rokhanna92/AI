@@ -1,0 +1,50 @@
+You are an expert React developer. Create a clean, simple, professional single-page web application using Vite + React + Tailwind CSS that serves as a realistic demo for a Serbian agriculture business plan generator (IPARD style).
+
+### Design & Language:
+- All text in Serbian (Latin script).
+- Color palette: Light green background (#f1f8f0), main green (#15803d), subtle brown accents (#854d0e), dark text (#166534). Calm and professional Vojvodina farmer style.
+- Large, clear fonts and big buttons.
+
+### App Flow:
+1. **Home / Template Selection**
+   - Header: "Poslovni Plan Generator - Za poljoprivrednike Vojvodine"
+   - Three big cards:
+     - Rakija od šljive (active one)
+     - Template 2 (placeholder)
+     - Template 3 (placeholder)
+
+2. **Input Screen** (after selecting "Rakija od šljive")
+   - Title: "Unos podataka: Rakija od šljive"
+   - Clean form with sections exactly like this:
+     - Podaci o investiciji (Nosioc gazdinstva, Mesto, Iznos investicije u RSD)
+     - Proizvodnja i prodaja (Godišnja proizvodnja u litrima, Procenjena prodajna cena po litru)
+     - Troškovi (Troškovi sirovine godišnje, Troškovi rada godišnje, itd.)
+     - Ostalo (Napomene za plan)
+   - All inputs must be large and interactive.
+   - Big green button at the bottom: "Generiši poslovni plan"
+
+3. **Generation Process**
+   - When button is clicked, show loading with 3 steps in Serbian:
+     - "Računam tabele i finansijske pokazatelje..."
+     - "AI generiše opisni deo poslovnog plana..."
+     - "Pripremam dokumente za preuzimanje..."
+
+4. **Success / Result Screen**
+   - Show a professional preview titled "Pregled generisanog sadržaja"
+   - Display dummy realistic Serbian text for chapters (at least 1. Rezime poslovnog plana, 2. Analiza tržišta, 5. Očekivani efekti, etc.) — make the text look professional and similar to real business plans.
+   - Three large download buttons at the top:
+     - 🟫 Preuzmi Excel
+     - 🟩 Preuzmi Word
+     - 🟩 Preuzmi PDF
+   - Button at the bottom: "Započni novi plan"
+
+### Demo Behavior:
+- When "Generiši" is clicked, simulate the process with the loading steps.
+- On success screen, generate plausible dummy numbers and dummy Serbian descriptive text that looks like real output from the Excel + Word files.
+- Buttons should be clickable (for now just show alert("Preuzimanje simulirano") or console.log).
+
+Make the UI calm, spacious, professional and easy to use for farmers. Use Tailwind CSS.
+
+First show the project structure, then provide the full code for src/App.jsx and necessary components so it runs smoothly on Replit.
+
+Start building.

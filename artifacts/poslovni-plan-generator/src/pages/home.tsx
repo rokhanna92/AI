@@ -10,15 +10,15 @@ import { Settings, FileText, CheckCircle2, Download, ChevronRight, Calculator, B
 type Step = 'select' | 'form' | 'loading' | 'success';
 
 const TEMPLATES = [
-  { id: 'rakija', title: 'Rakija od šljive', desc: 'Kompletan plan za destileriju' },
+  { id: 'rakija', title: 'Rakija od šljive', desc: 'Aktivan IPARD demo obrazac' },
   { id: 'template-2', title: 'Template 2', desc: 'Placeholder za sledeći poslovni plan' },
   { id: 'template-3', title: 'Template 3', desc: 'Placeholder za budući model plana' },
 ];
 
 const LOADING_STEPS = [
-  "Računam tabele...",
-  "AI generiše opis...",
-  "Pripremam dokumente..."
+  "Računam tabele i finansijske pokazatelje...",
+  "AI generiše opisni deo poslovnog plana...",
+  "Pripremam dokumente za preuzimanje..."
 ];
 
 export default function Home() {
@@ -43,6 +43,10 @@ export default function Home() {
   }, [step]);
 
   const handleTemplateSelect = (id: string) => {
+    if (id !== 'rakija') {
+      alert("Ovaj template je placeholder za demo verziju");
+      return;
+    }
     setSelectedTemplate(id);
     setStep('form');
   };
@@ -58,13 +62,17 @@ export default function Home() {
     setSelectedTemplate(null);
   };
 
+  const simulateDownload = () => {
+    alert("Preuzimanje simulirano");
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border bg-white/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-primary tracking-tight">Poslovni Plan Generator</h1>
-            <p className="text-sm text-foreground/70">Za poljoprivrednike Vojvodine</p>
+            <h1 className="text-2xl font-bold text-primary tracking-tight">Poslovni Plan Generator - Za poljoprivrednike Vojvodine</h1>
+            <p className="text-sm text-foreground/70">Jednostavan demo alat za pripremu poslovnog plana</p>
           </div>
           
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -105,15 +113,15 @@ export default function Home() {
         {step === 'select' && (
           <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="text-center max-w-2xl mx-auto mb-12">
-              <h2 className="text-4xl font-bold text-foreground mb-4">Odaberite tip proizvodnje</h2>
+              <h2 className="text-4xl font-bold text-foreground mb-4">Odaberite template</h2>
               <p className="text-lg text-foreground/80">
-                Naš sistem će vam pomoći da brzo kreirate profesionalan poslovni plan spreman za konkurse.
+                Izaberite obrazac za pripremu profesionalnog poslovnog plana u IPARD stilu.
               </p>
             </div>
             
             <div className="grid md:grid-cols-3 gap-6">
               {TEMPLATES.map((t) => (
-                <Card key={t.id} className="cursor-pointer hover:border-primary/50 transition-colors shadow-sm hover:shadow-md bg-white group" onClick={() => handleTemplateSelect(t.id)}>
+                <Card key={t.id} className={`cursor-pointer transition-colors shadow-sm hover:shadow-md bg-white group ${t.id === 'rakija' ? 'hover:border-primary/50' : 'opacity-80 hover:border-accent/30'}`} onClick={() => handleTemplateSelect(t.id)}>
                   <CardHeader>
                     <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 text-primary group-hover:scale-110 transition-transform">
                       <FileText className="w-6 h-6" />
@@ -123,7 +131,7 @@ export default function Home() {
                   </CardHeader>
                   <CardFooter>
                     <Button variant="ghost" className="w-full justify-between text-accent group-hover:bg-accent/5">
-                      Započni <ChevronRight className="w-4 h-4" />
+                      {t.id === 'rakija' ? 'Započni' : 'Uskoro'} <ChevronRight className="w-4 h-4" />
                     </Button>
                   </CardFooter>
                 </Card>
@@ -147,7 +155,7 @@ export default function Home() {
                 <h3 className="text-xl font-semibold text-primary border-b border-border pb-2">Podaci o investiciji</h3>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="investitor">Nosilac gazdinstva</Label>
+                    <Label htmlFor="investitor">Nosioc gazdinstva</Label>
                     <Input id="investitor" placeholder="Ime i prezime" required className="h-14 text-lg" />
                   </div>
                   <div className="space-y-2">
@@ -155,7 +163,7 @@ export default function Home() {
                     <Input id="lokacija" placeholder="Npr. Subotica" required className="h-14 text-lg" />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="iznos">Iznos investicije (RSD)</Label>
+                    <Label htmlFor="iznos">Iznos investicije u RSD</Label>
                     <Input id="iznos" type="number" placeholder="0" required className="h-14 text-lg" />
                   </div>
                 </div>
@@ -165,12 +173,12 @@ export default function Home() {
                 <h3 className="text-xl font-semibold text-primary border-b border-border pb-2">Proizvodnja i prodaja</h3>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="kolicina">Godišnja proizvodnja</Label>
-                    <Input id="kolicina" placeholder="Npr. 5000 litara" required className="h-14 text-lg" />
+                    <Label htmlFor="kolicina">Godišnja proizvodnja u litrima</Label>
+                    <Input id="kolicina" type="number" placeholder="Npr. 5000" required className="h-14 text-lg" />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="cena">Procenjena prodajna cena</Label>
-                    <Input id="cena" placeholder="RSD po jedinici" required className="h-14 text-lg" />
+                    <Label htmlFor="cena">Procenjena prodajna cena po litru</Label>
+                    <Input id="cena" type="number" placeholder="RSD po litru" required className="h-14 text-lg" />
                   </div>
                 </div>
               </div>
@@ -179,12 +187,16 @@ export default function Home() {
                 <h3 className="text-xl font-semibold text-primary border-b border-border pb-2">Troškovi</h3>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="sirovine">Troškovi sirovina (godišnje)</Label>
+                    <Label htmlFor="sirovine">Troškovi sirovine godišnje</Label>
                     <Input id="sirovine" type="number" placeholder="0" className="h-14 text-lg" />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="rad">Troškovi rada (godišnje)</Label>
+                    <Label htmlFor="rad">Troškovi rada godišnje</Label>
                     <Input id="rad" type="number" placeholder="0" className="h-14 text-lg" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="ostali-troskovi">Ostali troškovi godišnje</Label>
+                    <Input id="ostali-troskovi" type="number" placeholder="0" className="h-14 text-lg" />
                   </div>
                 </div>
               </div>
@@ -246,14 +258,14 @@ export default function Home() {
               </p>
               
               <div className="flex flex-wrap justify-center gap-4">
-                <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground min-w-[200px] h-14 text-lg">
-                  <Download className="mr-2" /> Preuzmi Excel
+                <Button size="lg" onClick={simulateDownload} className="bg-accent hover:bg-accent/90 text-accent-foreground min-w-[200px] h-14 text-lg">
+                  <span className="mr-2">🟫</span><Download className="mr-2" /> Preuzmi Excel
                 </Button>
-                <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground min-w-[200px] h-14 text-lg">
-                  <Download className="mr-2" /> Preuzmi Word
+                <Button size="lg" onClick={simulateDownload} className="bg-primary hover:bg-primary/90 text-primary-foreground min-w-[200px] h-14 text-lg">
+                  <span className="mr-2">🟩</span><Download className="mr-2" /> Preuzmi Word
                 </Button>
-                <Button size="lg" variant="outline" className="min-w-[200px] h-14 text-lg border-primary text-primary hover:bg-primary/5">
-                  <Download className="mr-2" /> Preuzmi PDF
+                <Button size="lg" onClick={simulateDownload} className="bg-primary hover:bg-primary/90 text-primary-foreground min-w-[200px] h-14 text-lg">
+                  <span className="mr-2">🟩</span><Download className="mr-2" /> Preuzmi PDF
                 </Button>
               </div>
             </div>
@@ -263,15 +275,23 @@ export default function Home() {
               <div className="space-y-6 text-foreground/90 font-serif leading-relaxed">
                 <div>
                   <h4 className="font-bold text-lg mb-2">1. Rezime poslovnog plana</h4>
-                  <p>Ovaj poslovni plan predstavlja detaljnu analizu opravdanosti investicije u unapređenje poljoprivredne proizvodnje. Cilj investicije je povećanje obima i kvaliteta finalnog proizvoda, uz smanjenje jediničnih troškova. Očekuje se da će predložena ulaganja značajno doprineti konkurentnosti gazdinstva na domaćem tržištu.</p>
+                  <p>Ovaj poslovni plan prikazuje opravdanost ulaganja u proizvodnju rakije od šljive na porodičnom poljoprivrednom gazdinstvu u Vojvodini. Planirana investicija iznosi 2.850.000 RSD i obuhvata nabavku opreme za preradu, fermentaciju, destilaciju i osnovno pakovanje proizvoda. Projektovana godišnja proizvodnja je 4.200 litara rakije, uz prosečnu prodajnu cenu od 1.450 RSD po litru.</p>
                 </div>
                 <div>
                   <h4 className="font-bold text-lg mb-2">2. Analiza tržišta</h4>
-                  <p>Tržište poljoprivrednih proizvoda u regionu Vojvodine beleži stabilan rast potražnje za kvalitetnim, lokalno proizvedenim proizvodima. Konkurencija je prisutna, ali fokus na viši nivo obrade i pouzdan plasman omogućava stabilan tržišni udeo.</p>
+                  <p>Potražnja za kvalitetnim domaćim voćnim rakijama u Srbiji ostaje stabilna, posebno za proizvodima sa jasnim poreklom sirovine i kontrolisanim procesom proizvodnje. Gazdinstvo planira plasman kroz lokalne prodavnice, ugostiteljske objekte, sajmove hrane i direktnu prodaju kupcima. Prednost projekta je dostupnost domaće šljive, prepoznatljiv regionalni karakter i mogućnost postepenog povećanja prodaje kroz brendiranje proizvoda.</p>
+                </div>
+                <div>
+                  <h4 className="font-bold text-lg mb-2">3. Finansijski pokazatelji</h4>
+                  <p>Ukupni očekivani godišnji prihodi procenjuju se na 6.090.000 RSD. Godišnji troškovi sirovine, rada, ambalaže, energije i održavanja procenjeni su na 3.120.000 RSD. Očekivana bruto dobit pre amortizacije iznosi približno 2.970.000 RSD, što ukazuje na dobru ekonomsku održivost projekta u uslovima planirane prodaje.</p>
+                </div>
+                <div>
+                  <h4 className="font-bold text-lg mb-2">4. Plan realizacije investicije</h4>
+                  <p>Realizacija investicije planirana je u tri faze: nabavka i montaža opreme, probna proizvodnja i organizacija redovne prodaje. Predviđeni period pokretanja proizvodnje je 4 meseca od dana obezbeđenja sredstava. Posebna pažnja biće posvećena kontroli kvaliteta, higijenskim uslovima i pravilnom skladištenju gotovog proizvoda.</p>
                 </div>
                 <div>
                   <h4 className="font-bold text-lg mb-2">5. Očekivani efekti</h4>
-                  <p>Na osnovu projektovanih prihoda i troškova, investicija pokazuje visoku stopu rentabilnosti. Rok povraćaja uloženih sredstava procenjen je na 3.5 godine. Projekat direktno doprinosi stabilnosti prihoda gazdinstva i otvara mogućnosti za dalje proširenje kapaciteta.</p>
+                  <p>Očekuje se povećanje prihoda gazdinstva, bolja iskorišćenost sopstvene sirovine i stvaranje proizvoda veće dodate vrednosti. Rok povraćaja investicije procenjuje se na oko 3 godine, uz mogućnost dodatnog rasta kroz unapređenje ambalaže i širenje prodajnih kanala. Projekat doprinosi jačanju ruralne ekonomije i dugoročnoj stabilnosti porodičnog gazdinstva.</p>
                 </div>
               </div>
               
