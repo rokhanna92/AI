@@ -4,13 +4,10 @@ import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 
-// Use environment variable if present, otherwise default to 3000 for build safety
+// Build-safe environment variables
 const rawPort = process.env.PORT || "3000";
 const port = Number(rawPort);
-
-// GitHub Pages needs the base path to match your repo name: /AI/
-// We provide a fallback so the build doesn't throw an error
-const basePath = process.env.BASE_PATH || "/AI/";
+const basePath = "/AI/"; // Hard-coded for the 'AI' repo to prevent 404s
 
 export default defineConfig({
   base: basePath,
@@ -41,8 +38,8 @@ export default defineConfig({
   },
   root: path.resolve(import.meta.dirname),
   build: {
-    // Ensuring this matches the path used in the .yml file
-    outDir: path.resolve(import.meta.dirname, "dist/public"),
+    // Simplified outDir to 'dist' to ensure GitHub finds the index.html
+    outDir: path.resolve(import.meta.dirname, "dist"),
     emptyOutDir: true,
   },
   server: {

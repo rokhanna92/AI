@@ -26,17 +26,15 @@ jobs:
           cache: 'pnpm'
 
       - name: Install Dependencies
-        # Fixes the lockfile mismatch error from your screenshot
         run: pnpm install --no-frozen-lockfile
 
       - name: Build Project
-        # Uses the exact name from your package.json
         run: pnpm --filter "@workspace/poslovni-plan-generator" run build
 
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Points to the build output folder
+          # This must be the exact path to where 'index.html' ends up
           path: './artifacts/poslovni-plan-generator/dist'
 
   deploy:
