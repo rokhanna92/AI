@@ -9,6 +9,9 @@ import {
   TrendingUp, BarChart3, Cpu, Zap, Shield, Target,
   ArrowLeft, CheckCircle2, Activity, Database, Layers, Sun, Leaf
 } from "lucide-react";
+import euFlag from './eu.png';
+import sprout from './humans.png';
+import watering from './trees.png';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // THEME SYSTEM
@@ -248,7 +251,7 @@ const THEME_CONFIG: Record<ThemeKey, ThemeConfig> = {
     statPositiveBg: "rgba(22,163,74,0.06)",
     statNegativeBg: "rgba(220,38,38,0.05)",
     statMutedText: "#6B7280",
-    logoAccentText: "#2563EB",
+    logoAccentText: "#00BFFF",
     logoVersionText: "rgba(75,111,212,0.5)",
     logoIconBg: "rgba(37,99,235,0.08)",
     logoIconBorder: "rgba(37,99,235,0.25)",
@@ -259,7 +262,7 @@ const THEME_CONFIG: Record<ThemeKey, ThemeConfig> = {
     heroLabel: "rgba(37,99,235,0.65)",
     heroTitle1: "#111827",
     heroTitle2: "#6B7280",
-    heroTitle3: "#1D4ED8",
+    heroTitle3: "#00BFFF",
     themeSwitcherBg: "rgba(255,255,255,0.8)",
     themeSwitcherBorder: "rgba(156,163,175,0.4)",
     themeSwitcherActiveBg: "rgba(37,99,235,0.1)",
@@ -278,7 +281,7 @@ const THEME_CONFIG: Record<ThemeKey, ThemeConfig> = {
   },
 
   yellow: {
-    pageBg: "radial-gradient(ellipse at 20% 20%, rgba(20,50,18,0.97) 0%, rgba(5,12,5,1) 60%), url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23FFDE00' fill-opacity='0.025'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")",
+    pageBg: "radial-gradient(ellipse at 20% 20%, rgba(5, 5, 5, 0.97) 0%, rgb(0, 0, 0) 60%), url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23FFDE00' fill-opacity='0.025'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")",
     pagePattern: "",
     headerBg: "rgba(5,12,5,0.85)",
     cardBg: "rgba(10,22,10,0.65)",
@@ -525,6 +528,154 @@ const JD = {
   gray500: "#6B7280", gray300: "#D1D5DB", gray100: "#F3F4F6",
   white: "#FFFFFF", red: "#DC2626", redPale: "#FEF2F2",
 };
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TYPOGRAPHY SYSTEM
+// Primary sans  → Inter (with Geist fallback) — headings, body, UI
+// Technical mono → JetBrains Mono — labels, metadata, numbers, codes
+// ═══════════════════════════════════════════════════════════════════════════
+
+const FONT = {
+  sans: "'Inter', 'Geist', 'Helvetica Neue', Arial, sans-serif",
+  mono: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace",
+} as const;
+
+/** Reusable style objects — spread into `style={{}}` props */
+const TYPO = {
+  // ── Headings ──────────────────────────────────────────────────────────
+  h1: {
+    fontFamily: FONT.sans,
+    fontWeight: 700,
+    letterSpacing: "-0.02em",
+    lineHeight: 1.05,
+  } as React.CSSProperties,
+
+  h2: {
+    fontFamily: FONT.sans,
+    fontWeight: 700,
+    letterSpacing: "-0.015em",
+    lineHeight: 1.15,
+  } as React.CSSProperties,
+
+  h3: {
+    fontFamily: FONT.sans,
+    fontWeight: 700,
+    letterSpacing: "-0.01em",
+    lineHeight: 1.2,
+  } as React.CSSProperties,
+
+  // ── Body / UI prose ───────────────────────────────────────────────────
+  body: {
+    fontFamily: FONT.sans,
+    fontWeight: 400,
+    letterSpacing: "0em",
+    lineHeight: 1.6,
+  } as React.CSSProperties,
+
+  bodySm: {
+    fontFamily: FONT.sans,
+    fontWeight: 400,
+    fontSize: "0.75rem",
+    letterSpacing: "0em",
+    lineHeight: 1.55,
+  } as React.CSSProperties,
+
+  // ── Interactive / button text ─────────────────────────────────────────
+  ui: {
+    fontFamily: FONT.sans,
+    fontWeight: 600,
+    letterSpacing: "0em",
+    lineHeight: 1.4,
+  } as React.CSSProperties,
+
+  uiBold: {
+    fontFamily: FONT.sans,
+    fontWeight: 700,
+    letterSpacing: "-0.005em",
+    lineHeight: 1.4,
+  } as React.CSSProperties,
+
+  // ── Span / inline accent (brand use) ──────────────────────────────────
+  brandAccent: {
+    fontFamily: FONT.sans,
+    fontWeight: 700,
+    letterSpacing: "-0.02em",
+    lineHeight: 1.05,
+  } as React.CSSProperties,
+
+  // ── Labels & metadata (monospace technical) ────────────────────────────
+  label: {
+    fontFamily: FONT.mono,
+    fontWeight: 600,
+    fontSize: "0.75rem",
+    letterSpacing: "0.18em",
+    textTransform: "uppercase" as const,
+    lineHeight: 1.4,
+  } as React.CSSProperties,
+
+  labelXs: {
+    fontFamily: FONT.mono,
+    fontWeight: 600,
+    fontSize: "0.625rem",  // 10px
+    letterSpacing: "0.2em",
+    textTransform: "uppercase" as const,
+    lineHeight: 1.4,
+  } as React.CSSProperties,
+
+  labelXxs: {
+    fontFamily: FONT.mono,
+    fontWeight: 600,
+    fontSize: "0.5625rem",  // 9px
+    letterSpacing: "0.2em",
+    textTransform: "uppercase" as const,
+    lineHeight: 1.4,
+  } as React.CSSProperties,
+
+  // ── Monospace numeric / code ───────────────────────────────────────────
+  numeric: {
+    fontFamily: FONT.mono,
+    fontWeight: 700,
+    letterSpacing: "0.05em",
+    lineHeight: 1.3,
+  } as React.CSSProperties,
+
+  numericLg: {
+    fontFamily: FONT.mono,
+    fontWeight: 900,
+    letterSpacing: "0.02em",
+    lineHeight: 1.1,
+  } as React.CSSProperties,
+
+  // ── Table header ──────────────────────────────────────────────────────
+  tableHead: {
+    fontFamily: FONT.mono,
+    fontWeight: 700,
+    fontSize: "0.625rem",
+    letterSpacing: "0.15em",
+    textTransform: "uppercase" as const,
+    lineHeight: 1.4,
+  } as React.CSSProperties,
+
+  // ── Chip / tag ────────────────────────────────────────────────────────
+  chip: {
+    fontFamily: FONT.mono,
+    fontWeight: 700,
+    fontSize: "0.5625rem",
+    letterSpacing: "0.2em",
+    textTransform: "uppercase" as const,
+    lineHeight: 1.4,
+  } as React.CSSProperties,
+
+  // ── Footer / fine print ───────────────────────────────────────────────
+  footer: {
+    fontFamily: FONT.mono,
+    fontWeight: 600,
+    fontSize: "0.5625rem",
+    letterSpacing: "0.3em",
+    textTransform: "uppercase" as const,
+    lineHeight: 1.6,
+  } as React.CSSProperties,
+} as const;
 
 // ═══════════════════════════════════════════════════════════════════════════
 // TYPES
@@ -1253,8 +1404,8 @@ function GlassSelect({ value, onChange, options, tc }: {
 
 function ThemeSwitcher({ theme, setTheme, tc }: { theme: ThemeKey; setTheme: (t: ThemeKey) => void; tc: ThemeConfig }) {
   const themes: { key: ThemeKey; label: string; icon: React.ReactNode }[] = [
-    { key: "white", label: "Light", icon: <Sun size={12} /> },
-    { key: "yellow", label: "Agro", icon: <Leaf size={12} /> },
+    { key: "white", label: "", icon: <Sun size={12} style={{ color: tc.heroTitle3 }} /> },
+    { key: "yellow", label: "", icon: <Leaf size={12} /> },
   ];
   return (
     <div className="flex items-center gap-1 p-1 rounded-xl"
@@ -1288,57 +1439,60 @@ function StepWizard({ steps, currentStep, setCurrentStep, children, onFinish, on
   return (
     <div>
       {/* HUD Timeline */}
-      <div className="mb-8 overflow-x-auto pb-2">
-        <div className="flex items-center min-w-max">
-          {steps.map((s, i) => (
-            <div key={s.id} className="flex items-center">
-              <button onClick={() => setCurrentStep(i)}
-                className="flex flex-col items-center gap-1.5 group transition-all"
-                style={{ minWidth: 80 }}>
-                <div className="relative w-9 h-9 rounded-full flex items-center justify-center transition-all"
-                  style={{
-                    background: i === currentStep ? tc.stepActiveBg : i < currentStep ? tc.stepDoneBg : "rgba(128,128,128,0.06)",
-                    border: `1.5px solid ${i === currentStep ? tc.stepActive : i < currentStep ? tc.stepDone : tc.stepInactive}`,
-                    boxShadow: i === currentStep ? `0 0 16px ${tc.stepActive}33` : "none",
-                  }}>
-                  {i < currentStep
-                    ? <CheckCircle2 size={15} color={tc.stepDone} />
-                    : <span className="text-xs" style={{ color: i === currentStep ? tc.stepActive : tc.stepInactive }}>{s.icon}</span>
-                  }
-                  {i === currentStep && (
-                    <div className="absolute -inset-1 rounded-full animate-ping opacity-20"
-                      style={{ background: tc.stepActive, animationDuration: "2s" }} />
-                  )}
-                </div>
-                <div className="flex flex-col items-center">
-                  <span className="text-[9px] font-bold uppercase tracking-[0.15em] whitespace-nowrap transition-colors"
-                    style={{
-                      color: i === currentStep ? tc.stepActive : i < currentStep ? tc.stepDone : tc.stepInactive,
-                      fontFamily: "monospace",
-                    }}>
-                    {s.label}
-                  </span>
-                  {s.tableRef && (
-                    <span className="text-[8px] tracking-wide"
-                      style={{ color: tc.stepInactive, fontFamily: "monospace" }}>
-                      {s.tableRef}
-                    </span>
-                  )}
-                </div>
-              </button>
-              {i < steps.length - 1 && (
-                <div className="mx-2 h-px w-8 flex-shrink-0"
-                  style={{
-                    background: i < currentStep
-                      ? `linear-gradient(90deg, ${tc.stepDone}99, ${tc.stepDone}44)`
-                      : tc.wizardNavBorder,
-                    boxShadow: i < currentStep ? `0 0 4px ${tc.stepDone}44` : "none",
-                  }} />
-              )}
-            </div>
-          ))}
-        </div>
+      <div 
+  className="mb-8 overflow-x-auto pb-2" 
+  style={{ paddingTop: "1.2rem" }} // Added margin-top here
+>
+  <div className="flex items-center min-w-max">
+    {steps.map((s, i) => (
+      <div key={s.id} className="flex items-center">
+        <button onClick={() => setCurrentStep(i)}
+          className="flex flex-col items-center gap-1.5 group transition-all"
+          style={{ minWidth: 80 }}>
+          <div className="relative w-9 h-9 rounded-full flex items-center justify-center transition-all"
+            style={{
+              background: i === currentStep ? tc.stepActiveBg : i < currentStep ? tc.stepDoneBg : "rgba(128,128,128,0.06)",
+              border: `1.5px solid ${i === currentStep ? tc.stepActive : i < currentStep ? tc.stepDone : tc.stepInactive}`,
+              boxShadow: i === currentStep ? `0 0 16px ${tc.stepActive}33` : "none",
+            }}>
+            {i < currentStep
+              ? <CheckCircle2 size={15} color={tc.stepDone} />
+              : <span className="text-xs" style={{ color: i === currentStep ? tc.stepActive : tc.stepInactive }}>{s.icon}</span>
+            }
+            {i === currentStep && (
+              <div className="absolute -inset-1 rounded-full animate-ping opacity-20"
+                style={{ background: tc.stepActive, animationDuration: "2s" }} />
+            )}
+          </div>
+          <div className="flex flex-col items-center">
+            <span className="text-[9px] font-bold uppercase tracking-[0.15em] whitespace-nowrap transition-colors"
+              style={{
+                color: i === currentStep ? tc.stepActive : i < currentStep ? tc.stepDone : tc.stepInactive,
+                fontFamily: "monospace",
+              }}>
+              {s.label}
+            </span>
+            {s.tableRef && (
+              <span className="text-[8px] tracking-wide"
+                style={{ color: tc.stepInactive, fontFamily: "monospace" }}>
+                {s.tableRef}
+              </span>
+            )}
+          </div>
+        </button>
+        {i < steps.length - 1 && (
+          <div className="mx-2 h-px w-8 flex-shrink-0"
+            style={{
+              background: i < currentStep
+                ? `linear-gradient(90deg, ${tc.stepDone}99, ${tc.stepDone}44)`
+                : tc.wizardNavBorder,
+              boxShadow: i < currentStep ? `0 0 4px ${tc.stepDone}44` : "none",
+            }} />
+        )}
       </div>
+    ))}
+  </div>
+</div>
 
       <div>{children}</div>
 
@@ -1509,32 +1663,45 @@ function Path1Wizard({ profile, onBack, tc }: { profile: GlobalProfile; onBack: 
         </div>
       )}
 
-      {step === 1 && (
-        <Card tc={tc}>
-          <SectionHeader icon={Layers} title="Vrednost osnovnih sredstava" table="Tabela 1.5" tc={tc} />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
-            <div className="space-y-5">
-              <JDInput label="Vrednost zemljišta (RSD)" type="number" value={s.landValue} onChange={v => setS({ ...s, landValue: parseInt(v) || 0 })} tc={tc} />
-              <JDInput label="Vrednost objekata (RSD)" type="number" value={s.buildingValue} onChange={v => setS({ ...s, buildingValue: parseInt(v) || 0 })} tc={tc} />
-              <JDInput label="Vrednost stočnog fonda (RSD)" type="number" value={s.livestockValue} onChange={v => setS({ ...s, livestockValue: parseInt(v) || 0 })} tc={tc} />
-              <JDInput label="Vrednost mehanizacije (RSD)" type="number" value={s.equipmentValue} onChange={v => setS({ ...s, equipmentValue: parseInt(v) || 0 })} tc={tc} />
-            </div>
-            <div className="flex items-center justify-center">
-              <div className="text-center p-8 rounded-2xl"
-                style={{
-                  background: tc.accentBg,
-                  border: `1px solid ${tc.accentBorder}`,
-                  boxShadow: `0 0 40px ${tc.accent}1a`,
-                }}>
-                <div className="text-[10px] uppercase tracking-[0.25em] mb-2 font-bold" style={{ color: tc.accentDim, fontFamily: "monospace" }}>Ukupna aktiva</div>
-                <div className="text-3xl font-black" style={{ color: tc.accent, fontFamily: "monospace", textShadow: `0 0 20px ${tc.accent}66` }}>
-                  {fmtRSD(calc.totalAssets)}
-                </div>
-              </div>
-            </div>
+{step === 1 && (
+  <Card tc={tc}>
+    <SectionHeader icon={Layers} title="Vrednost osnovnih sredstava" table="Tabela 1.5" tc={tc} />
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+      {/* Input Side */}
+      <div className="space-y-5">
+        <JDInput label="Vrednost zemljišta (RSD)" type="number" value={s.landValue} onChange={v => setS({ ...s, landValue: parseInt(v) || 0 })} tc={tc} />
+        <JDInput label="Vrednost objekata (RSD)" type="number" value={s.buildingValue} onChange={v => setS({ ...s, buildingValue: parseInt(v) || 0 })} tc={tc} />
+        <JDInput label="Vrednost stočnog fonda (RSD)" type="number" value={s.livestockValue} onChange={v => setS({ ...s, livestockValue: parseInt(v) || 0 })} tc={tc} />
+        <JDInput label="Vrednost mehanizacije (RSD)" type="number" value={s.equipmentValue} onChange={v => setS({ ...s, equipmentValue: parseInt(v) || 0 })} tc={tc} />
+      </div>
+
+      {/* Display Side */}
+      <div className="flex items-center justify-center">
+        <div 
+          className="text-center p-8 rounded-2xl w-full"
+          style={{
+            background: '',
+            border: `1px solid ${tc.accentBorder}`,
+            boxShadow: `0 0 20px ${tc.accent}1a`,
+          }}
+        >
+          <div 
+            className="text-[10px] uppercase tracking-[0.25em] mb-2 font-bold" 
+            style={{ color: tc.accentDim, fontFamily: "monospace" }}
+          >
+            Ukupna aktiva
           </div>
-        </Card>
-      )}
+          <div 
+            className="text-3xl font-black" 
+            style={{ color: tc.accent, fontFamily: "monospace", textShadow: `0 0 .1px ${tc.accent}66` }}
+          >
+            {fmtRSD(calc.totalAssets)}
+          </div>
+        </div>
+      </div>
+    </div>
+  </Card>
+)}
 
       {step === 2 && (
         <Card tc={tc}>
@@ -1893,6 +2060,33 @@ export default function AgroPlanApp() {
   const [path, setPath] = useState<PathId>("home");
   const [profile, setProfile] = useState<GlobalProfile>(GLOBAL_INIT);
   const [theme, setTheme] = useState<ThemeKey>("white");
+  const [showProfile, setShowProfile] = useState(false);
+  const profileRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLDivElement>(null);
+
+  // Scroll-up at top-of-page reveals the profile panel
+  useEffect(() => {
+    if (path !== "home") return;
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const currentY = window.scrollY;
+      if (currentY < 40 && currentY < lastY) {
+        setShowProfile(true);
+      }
+      lastY = currentY;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [path]);
+
+  // Smooth scroll profile into view when opened
+  useEffect(() => {
+    if (showProfile && profileRef.current) {
+      setTimeout(() => {
+        profileRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }, 50);
+    }
+  }, [showProfile]);
 
   const tc = THEME_CONFIG[theme];
 
@@ -1905,7 +2099,7 @@ export default function AgroPlanApp() {
   return (
     <div className="min-h-screen pb-20 relative" style={{
       background: tc.pageBg,
-      fontFamily: "'Inter','Helvetica Neue',sans-serif",
+      fontFamily: FONT.sans,
       color: tc.textPrimary,
     }}>
 
@@ -1930,11 +2124,11 @@ export default function AgroPlanApp() {
               <Tractor size={16} color={tc.logoAccentText} />
             </div>
             <div>
-              <span className="font-black text-base tracking-tight" style={{ color: tc.textPrimary }}>AGRO</span>
-              <span className="font-black text-base tracking-tight" style={{ color: tc.logoAccentText }}>PLAN</span>
-              <span className="ml-2 text-[9px] uppercase tracking-[0.25em] align-middle"
-                style={{ color: tc.logoVersionText, fontFamily: "monospace" }}>
-                v3.0
+              <span className="font-black text-base" style={{ ...TYPO.uiBold, color: tc.textPrimary }}>AGRO</span>
+              <span className="font-black text-base" style={{ ...TYPO.uiBold, color: tc.heroTitle3 }}>PLAN</span>
+              <span className="ml-2 align-middle"
+                style={{ ...TYPO.labelXxs, color: tc.logoVersionText }}>
+                v3.2
               </span>
             </div>
           </div>
@@ -1970,25 +2164,69 @@ export default function AgroPlanApp() {
         {/* ── HOME ── */}
         {path === "home" && (
           <div className="space-y-10">
+
+            {/* ── COLLAPSIBLE PROFILE PANEL ── */}
+            <div
+              ref={profileRef}
+              style={{
+                overflow: "hidden",
+                maxHeight: showProfile ? "600px" : "0px",
+                opacity: showProfile ? 1 : 0,
+                transform: showProfile ? "translateY(0)" : "translateY(-18px)",
+                transition: "max-height 0.45s cubic-bezier(0.4,0,0.2,1), opacity 0.35s ease, transform 0.35s ease",
+                pointerEvents: showProfile ? "auto" : "none",
+              }}
+            >
+              {/* Close handle inside the panel */}
+              <div className="flex justify-end mb-3">
+                <button
+                  onClick={() => setShowProfile(false)}
+                  className="flex items-center gap-1.5 px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all"
+                  style={{
+                    color: tc.textMuted,
+                    border: `1px solid ${tc.cardBorder}`,
+                    background: tc.cardBg,
+                    backdropFilter: "blur(12px)",
+                    fontFamily: "monospace",
+                  }}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLElement).style.color = tc.textPrimary;
+                    (e.currentTarget as HTMLElement).style.borderColor = tc.accentBorder;
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLElement).style.color = tc.textMuted;
+                    (e.currentTarget as HTMLElement).style.borderColor = tc.cardBorder;
+                  }}
+                >
+                  <X size={11} />
+                  Zatvori
+                </button>
+              </div>
+              <GlobalProfileForm profile={profile} setProfile={setProfile} tc={tc} />
+            </div>
+
             {/* Hero */}
             <div className="max-w-3xl">
               <div className="flex items-center gap-2 mb-4">
-                <span className="text-[10px] uppercase tracking-[0.3em] font-bold" style={{ color: tc.heroLabel, fontFamily: "monospace" }}>
+                <span className="text-[10px] uppercase tracking-[0.3em] font-bold" style={{ color: tc.heroTitle3, fontFamily: "monospace" }}>
                   Agricultural Business Intelligence
                 </span>
               </div>
-              <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-4 leading-[1.05]">
-                <span style={{ color: tc.heroTitle1 }}>Automatizacija</span>{" "}
-                <span style={{
-                  color: "transparent",
-                  WebkitTextStroke: `1px ${tc.heroTitle2 === "rgba(255,255,255,0)" ? "rgba(255,255,255,0.4)" : tc.textMuted}`,
-                }}>poslovnih</span>{" "}
-                <span style={{ color: tc.heroTitle3 }}>planova.</span>
-              </h1>
+           <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-4 leading-[1.05]">
+            <span style={{ color: tc.heroTitle1, textDecoration: "underline" }}>
+              Automatizacija
+            </span>{" "}
+            <span style={{
+              color: "transparent",
+              WebkitTextStroke: `1px ${tc.heroTitle2 === "rgba(255,255,255,0)" ? "rgba(255,255,255,0.4)" : tc.textMuted}`,
+            }}>
+              poslovnih
+            </span>{" "}
+            <span style={{ color: tc.heroTitle3 }}>
+              planova.
+            </span>
+          </h1>
             </div>
-
-            {/* Profile */}
-            <GlobalProfileForm profile={profile} setProfile={setProfile} tc={tc} />
 
             {/* Path selection */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -2013,13 +2251,22 @@ export default function AgroPlanApp() {
                 }}>
                 <div className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity"
                   style={{ background: `linear-gradient(90deg, transparent, ${tc.path1GlowLine}, transparent)` }} />
-                <Globe size={28} color={tc.path1Glow} className="mb-5 opacity-80" />
+               <img 
+                    src={euFlag} 
+                    alt="EU Flag" 
+                    className="w-auto mb-5 opacity-80 h-[130px] object-contain" 
+                      style={{
+    display: "block", // Necessary for margin: "auto" to work on an image
+    margin: "auto",
+    marginBottom: "3rem",
+  }} 
+                  />
                 <h3 className="text-lg font-black mb-1.5" style={{ color: tc.textPrimary }}>IPARD / Vojvodina</h3>
                 <div className="text-[9px] uppercase tracking-[0.2em] mb-3 font-bold" style={{ color: `${tc.path1Glow}80`, fontFamily: "monospace" }}>
                   Tab. 1.1 → 1.5 → 3.2 → 5.1
                 </div>
                 <p className="text-xs leading-relaxed mb-5" style={{ color: tc.textMuted }}>
-                  Mera 1: Investicije u fizičku imovinu gazdinstava. Obimna dokumentacija sa punim zemljišnim i stočnim fondom.
+                  Putanja za velike investicije i ruralni razvoj. Fokusirana na modernizaciju poljoprivredne mehanizacije i infrastrukture kroz fondove EU standarda.
                 </p>
                 <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest" style={{ color: tc.path1Glow }}>
                   Pokreni <ChevronRight size={13} />
@@ -2046,13 +2293,22 @@ export default function AgroPlanApp() {
                 }}>
                 <div className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity"
                   style={{ background: `linear-gradient(90deg, transparent, ${tc.path2Glow}66, transparent)` }} />
-                <Sprout size={28} color={tc.path2Glow} className="mb-5 opacity-80" />
+                               <img 
+  src={sprout} 
+  alt="EU Flag" 
+  className="w-auto opacity-80 h-[130px] object-contain" // Removed mb-5 to use style instead
+  style={{
+    display: "block", // Necessary for margin: "auto" to work on an image
+    margin: "auto",
+    marginBottom: "3rem",
+  }} 
+/>
                 <h3 className="text-lg font-black mb-1.5" style={{ color: tc.textPrimary }}>Mladi Preduzetnik</h3>
                 <div className="text-[9px] uppercase tracking-[0.2em] mb-3 font-bold" style={{ color: `${tc.path2Glow}80`, fontFamily: "monospace" }}>
                   Tab. 8.1 → 8.2 → Ocena 9
                 </div>
                 <p className="text-xs leading-relaxed mb-5" style={{ color: tc.textMuted }}>
-                  Prilagođeno za start-up podsticaje. Fokus na ekonomskoj efikasnosti, analizi tržišta i ROI pokazateljima.
+                  Specijalizovana ruta za poljoprivrednike do 40 godina koji traže podršku za prvo osnivanje ili proširenje gazdinstva. Naglasak na modernom menadžmentu.
                 </p>
                 <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest" style={{ color: tc.path2Glow }}>
                   Pokreni <ChevronRight size={13} />
@@ -2079,15 +2335,24 @@ export default function AgroPlanApp() {
                 }}>
                 <div className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity"
                   style={{ background: `linear-gradient(90deg, transparent, ${tc.path3Glow}66, transparent)` }} />
-                <Droplets size={28} color={tc.path3Glow} className="mb-5 opacity-80" />
+                               <img 
+                    src={watering} 
+                    alt="EU Flag" 
+                    className="w-auto mb-5 opacity-80 h-[130px] object-contain" 
+                      style={{
+    display: "block", // Necessary for margin: "auto" to work on an image
+    margin: "auto",
+    marginBottom: "3rem",
+  }} 
+                  />
                 <h3 className="text-lg font-black mb-1.5" style={{ color: tc.textPrimary }}>Navodnjavanje</h3>
-                <div className="text-[9px] uppercase tracking-[0.2em] mb-3 font-bold" style={{ color: `${tc.path3Glow}80`, fontFamily: "monospace" }}>
+                <div className="text-[9px] uppercase tracking-[0.2em] mb-3 font-bold" style={{ color: `${tc.heroTitle3}80`, fontFamily: "monospace" }}>
                   Tab. 1.2 → 3.3 → 5.3
                 </div>
                 <p className="text-xs leading-relaxed mb-5" style={{ color: tc.textMuted }}>
-                  Specijalizovan model za tehničke investicije u sisteme za zalivanje, filtere i pumpne stanice.
+                  Namenska automatizacija za sisteme upravljanja vodom, solarne pumpe i efikasnu infrastrukturu za hidrataciju useva.
                 </p>
-                <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest" style={{ color: tc.path3Glow }}>
+                <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest" style={{ color: tc.heroTitle3 }}>
                   Pokreni <ChevronRight size={13} />
                 </span>
               </button>
@@ -2146,6 +2411,50 @@ export default function AgroPlanApp() {
           </div>
         )}
       </main>
+
+      {/* ── FLOATING PROFILE TOGGLE (only on home) ── */}
+      {path === "home" && (
+        <button
+          onClick={() => setShowProfile(prev => !prev)}
+          className="fixed bottom-8 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all"
+          style={{
+            background: showProfile
+              ? tc.accentBg
+              : tc.cardBg,
+            border: `1.5px solid ${showProfile ? tc.accentBorder : tc.cardBorder}`,
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+            color: showProfile ? tc.accent : tc.textMuted,
+            boxShadow: showProfile
+              ? `0 0 24px ${tc.accent}33, 0 4px 16px rgba(0,0,0,0.12)`
+              : "0 4px 24px rgba(0,0,0,0.10)",
+            fontFamily: "monospace",
+            letterSpacing: "0.12em",
+            transform: "translateZ(0)",
+          }}
+          onMouseEnter={e => {
+            (e.currentTarget as HTMLElement).style.boxShadow = `0 0 32px ${tc.accent}44, 0 6px 20px rgba(0,0,0,0.15)`;
+            (e.currentTarget as HTMLElement).style.borderColor = tc.accentBorder;
+            (e.currentTarget as HTMLElement).style.color = tc.accent;
+          }}
+          onMouseLeave={e => {
+            (e.currentTarget as HTMLElement).style.boxShadow = showProfile
+              ? `0 0 24px ${tc.accent}33, 0 4px 16px rgba(0,0,0,0.12)`
+              : "0 4px 24px rgba(0,0,0,0.10)";
+            (e.currentTarget as HTMLElement).style.borderColor = showProfile ? tc.accentBorder : tc.cardBorder;
+            (e.currentTarget as HTMLElement).style.color = showProfile ? tc.accent : tc.textMuted;
+          }}
+          title={showProfile ? "Sakrij podatke gazdinstva" : "Uredi podatke gazdinstva"}
+        >
+          <Database size={14} />
+          <span className="hidden sm:inline">
+            {showProfile ? "Zatvori profil" : "Osnovni Podaci"}
+          </span>
+          <span className="sm:hidden">
+            {showProfile ? <X size={12} /> : <Wrench size={12} />}
+          </span>
+        </button>
+      )}
 
       {/* Footer */}
       <div className="mt-20 text-center pb-8">
