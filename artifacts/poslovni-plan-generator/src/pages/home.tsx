@@ -12,6 +12,7 @@ import {
 import euFlag from './eu.png';
 import sprout from './humans.png';
 import watering from './trees.png';
+import head from './head.png';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // THEME SYSTEM
@@ -268,7 +269,7 @@ const THEME_CONFIG: Record<ThemeKey, ThemeConfig> = {
     themeSwitcherActiveBg: "rgba(37,99,235,0.1)",
     themeSwitcherActiveText: "#1D4ED8",
     themeSwitcherInactiveText: "#9CA3AF",
-    addRowText: "#2563EB",
+    addRowText: "color: rgb(0, 191, 255);",
     addRowBorder: "rgba(37,99,235,0.3)",
     addRowHoverText: "#1D4ED8",
     addRowHoverBorder: "#1D4ED8",
@@ -1515,7 +1516,7 @@ function StepWizard({ steps, currentStep, setCurrentStep, children, onFinish, on
             (e.currentTarget as HTMLElement).style.borderColor = tc.btnPrimaryBorder;
           }}>
           <ChevronLeft size={16} />
-          {currentStep === 0 ? "Odabir modela" : "Prethodni"}
+          {currentStep === 0 ? "Model" : "Prethodna"}
         </button>
 
         {currentStep < steps.length - 1 ? (
@@ -1535,7 +1536,7 @@ function StepWizard({ steps, currentStep, setCurrentStep, children, onFinish, on
               (e.currentTarget as HTMLElement).style.background = tc.btnPrimaryBg;
               (e.currentTarget as HTMLElement).style.boxShadow = `0 0 20px ${tc.accent}1a`;
             }}>
-            Sledeći <ChevronRight size={16} />
+            Sledeća <ChevronRight size={16} />
           </button>
         ) : (
           <button onClick={onFinish}
@@ -2256,10 +2257,10 @@ export default function AgroPlanApp() {
                     alt="EU Flag" 
                     className="w-auto mb-5 opacity-80 h-[130px] object-contain" 
                       style={{
-    display: "block", // Necessary for margin: "auto" to work on an image
-    margin: "auto",
-    marginBottom: "3rem",
-  }} 
+                      display: "block", // Necessary for margin: "auto" to work on an image
+                      margin: "auto",
+                      marginBottom: "3rem",
+                    }} 
                   />
                 <h3 className="text-lg font-black mb-1.5" style={{ color: tc.textPrimary }}>IPARD / Vojvodina</h3>
                 <div className="text-[9px] uppercase tracking-[0.2em] mb-3 font-bold" style={{ color: `${tc.path1Glow}80`, fontFamily: "monospace" }}>
@@ -2294,15 +2295,15 @@ export default function AgroPlanApp() {
                 <div className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity"
                   style={{ background: `linear-gradient(90deg, transparent, ${tc.path2Glow}66, transparent)` }} />
                                <img 
-  src={sprout} 
-  alt="EU Flag" 
-  className="w-auto opacity-80 h-[130px] object-contain" // Removed mb-5 to use style instead
-  style={{
-    display: "block", // Necessary for margin: "auto" to work on an image
-    margin: "auto",
-    marginBottom: "3rem",
-  }} 
-/>
+                                src={sprout} 
+                                alt="EU Flag" 
+                                className="w-auto opacity-80 h-[130px] object-contain" // Removed mb-5 to use style instead
+                                style={{
+                                  display: "block", // Necessary for margin: "auto" to work on an image
+                                  margin: "auto",
+                                  marginBottom: "3rem",
+                                }} 
+                              />
                 <h3 className="text-lg font-black mb-1.5" style={{ color: tc.textPrimary }}>Mladi Preduzetnik</h3>
                 <div className="text-[9px] uppercase tracking-[0.2em] mb-3 font-bold" style={{ color: `${tc.path2Glow}80`, fontFamily: "monospace" }}>
                   Tab. 8.1 → 8.2 → Ocena 9
@@ -2340,10 +2341,9 @@ export default function AgroPlanApp() {
                     alt="EU Flag" 
                     className="w-auto mb-5 opacity-80 h-[130px] object-contain" 
                       style={{
-    display: "block", // Necessary for margin: "auto" to work on an image
-    margin: "auto",
-    marginBottom: "3rem",
-  }} 
+                      display: "block", // Necessary for margin: "auto" to work on an image
+                      margin: "auto",
+                      marginBottom: "3rem",}} 
                   />
                 <h3 className="text-lg font-black mb-1.5" style={{ color: tc.textPrimary }}>Navodnjavanje</h3>
                 <div className="text-[9px] uppercase tracking-[0.2em] mb-3 font-bold" style={{ color: `${tc.heroTitle3}80`, fontFamily: "monospace" }}>
@@ -2416,43 +2416,42 @@ export default function AgroPlanApp() {
       {path === "home" && (
         <button
           onClick={() => setShowProfile(prev => !prev)}
-          className="fixed bottom-8 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all"
+          className="fixed bottom-8 right-6 z-50 flex items-center justify-center rounded-2xl transition-all"
           style={{
-            background: showProfile
-              ? tc.accentBg
-              : tc.cardBg,
+            width: "40px",
+            height: "40px",
+            background: showProfile ? tc.accentBg : tc.cardBg,
             border: `1.5px solid ${showProfile ? tc.accentBorder : tc.cardBorder}`,
             backdropFilter: "blur(20px)",
             WebkitBackdropFilter: "blur(20px)",
-            color: showProfile ? tc.accent : tc.textMuted,
             boxShadow: showProfile
               ? `0 0 24px ${tc.accent}33, 0 4px 16px rgba(0,0,0,0.12)`
               : "0 4px 24px rgba(0,0,0,0.10)",
-            fontFamily: "monospace",
-            letterSpacing: "0.12em",
             transform: "translateZ(0)",
           }}
           onMouseEnter={e => {
             (e.currentTarget as HTMLElement).style.boxShadow = `0 0 32px ${tc.accent}44, 0 6px 20px rgba(0,0,0,0.15)`;
             (e.currentTarget as HTMLElement).style.borderColor = tc.accentBorder;
-            (e.currentTarget as HTMLElement).style.color = tc.accent;
           }}
           onMouseLeave={e => {
             (e.currentTarget as HTMLElement).style.boxShadow = showProfile
               ? `0 0 24px ${tc.accent}33, 0 4px 16px rgba(0,0,0,0.12)`
               : "0 4px 24px rgba(0,0,0,0.10)";
             (e.currentTarget as HTMLElement).style.borderColor = showProfile ? tc.accentBorder : tc.cardBorder;
-            (e.currentTarget as HTMLElement).style.color = showProfile ? tc.accent : tc.textMuted;
           }}
           title={showProfile ? "Sakrij podatke gazdinstva" : "Uredi podatke gazdinstva"}
         >
-          <Database size={14} />
-          <span className="hidden sm:inline">
-            {showProfile ? "Zatvori profil" : "Osnovni Podaci"}
-          </span>
-          <span className="sm:hidden">
-            {showProfile ? <X size={12} /> : <Wrench size={12} />}
-          </span>
+          <img 
+            src={head} 
+            alt="Profile" 
+            style={{
+              width: "35px",
+              height: "35px",
+              objectFit: "cover",
+              transition: "all 0.2s ease",
+              filter: showProfile ? "brightness(1.2) saturate(1.15)" : "none",
+            }}
+          />
         </button>
       )}
 
