@@ -1,0 +1,68 @@
+{
+  "cover": {
+    "naziv_plana": "",
+    "investitor": "",
+    "mesto_realizacije": "",
+    "godina": "2026"
+  },
+
+  "rezime_poslovnog_plana": {
+    "1.1": { "naziv": "Назив", "vrednost": "" },
+    "1.2": { "naziv": "Инвеститор", "vrednost": "" },
+    "1.3": { "naziv": "Локација", "vrednost": "" },
+
+    "2.1": { "naziv": "Укупна улагања", "vrednost": 0 },
+    "2.2": { "naziv": "Улагања у основна средства", "vrednost": 0 },
+    "2.3": { "naziv": "Улагања у обртна средства", "vrednost": null },
+
+    "3.1": { "naziv": "Укупни извори", "vrednost": 0 },
+    "3.2": { "naziv": "Сопствени извори", "vrednost": 0 },
+    "3.3": { "naziv": "Туђи извори", "vrednost": 0 },
+
+    "4.1": { "naziv": "Намена", "vrednost": "" },
+    "4.2": { "naziv": "Почетак инвестирања", "vrednost": "" },
+    "4.3": { "naziv": "Завршетак инвестирања", "vrednost": "" },
+    "4.4": { "naziv": "Економски век пројекта", "vrednost": "" },
+    "4.5": { "naziv": "Тржиште продаје", "vrednost": "" },
+
+    "5.1": { "naziv": "Економичност", "vrednost": 0 },
+    "5.2": { "naziv": "Акумулативност", "vrednost": 0 },
+    "5.3": { "naziv": "Рентабилност", "vrednost": 0 },
+    "5.4": { "naziv": "Време повраћаја инвестиције", "vrednost": "" },
+    "5.5": { "naziv": "Укупна ангажованост радне снаге", "vrednost": "" }
+  },
+
+  "opis_poslovne_ideje": "",
+  "analiza_prodajnog_trista": "",
+  "analiza_nabavnog_trista": "",
+
+  "prihodi": {
+    "proizvodi": [
+      { "naziv": "", "jm": "", "cena": 0, "kolicinePoGodini": [0, 0, 0, 0, 0] },
+      { "naziv": "", "jm": "", "cena": 0, "kolicinePoGodini": [0, 0, 0, 0, 0] },
+      { "naziv": "", "jm": "", "cena": 0, "kolicinePoGodini": [0, 0, 0, 0, 0] }
+    ]
+  },
+
+  "troskovi": {
+    "materijalni": {
+      "semenje": 0,
+      "djubrivo": 0,
+      "hemija": 0
+    },
+    "energija": {
+      "gorivo": 0,
+      "struja": 0
+    },
+    "nematerijalni": {
+      "osiguranje": 0,
+      "racunovodstvo": 0,
+      "registracija": 0
+    },
+    "radnaSnaga": {
+      "broj": 0,
+      "mesecnaZarada": 0
+    },
+    "ukupnaInvesticija": 0
+  }
+}

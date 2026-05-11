@@ -13,66 +13,91 @@ export function ParallaxBlobs({ theme }: ParallaxBlobsProps) {
   const blob3Ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const styleSheet = document.createElement("style");
+    styleSheet.innerText = `
+      @keyframes fastDrift {
+        0% { transform: translate(0%, 0%) scale(1); }
+        50% { transform: translate(10%, 15%) scale(1.1); }
+        100% { transform: translate(0%, 0%) scale(1); }
+      }
+      .blob-active { 
+        animation: fastDrift var(--duration) infinite alternate ease-in-out;
+        will-change: transform;
+      }
+    `;
+    document.head.appendChild(styleSheet);
+
     const handleMouseMove = (e: MouseEvent) => {
-      const x = e.clientX / window.innerWidth;
-      const y = e.clientY / window.innerHeight;
-      if (blob1Ref.current) blob1Ref.current.style.transform = `translate(${x * 40 - 20}px, ${y * 30 - 15}px)`;
-      if (blob2Ref.current) blob2Ref.current.style.transform = `translate(${x * -28 + 14}px, ${y * 20 - 10}px)`;
-      if (blob3Ref.current) blob3Ref.current.style.transform = `translate(${x * 18 - 9}px, ${y * -22 + 11}px)`;
+      // High Multipliers: Small mouse movement (0.1) creates large pixel offset (250px)
+      const x = (e.clientX / window.innerWidth - 0.5) * 250; 
+      const y = (e.clientY / window.innerHeight - 0.5) * 200;
+      
+      requestAnimationFrame(() => {
+        if (blob1Ref.current) blob1Ref.current.style.transform = `translate(${x}px, ${y}px)`;
+        if (blob2Ref.current) blob2Ref.current.style.transform = `translate(${x * -1.5}px, ${y * -1.2}px)`;
+        if (blob3Ref.current) blob3Ref.current.style.transform = `translate(${x * 1.2}px, ${y * -1.8}px)`;
+      });
     };
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      const ratio = maxScroll > 0 ? scrollY / maxScroll : 0;
-      if (blob1Ref.current) blob1Ref.current.style.top = `${-10 + ratio * 30}%`;
-      if (blob2Ref.current) blob2Ref.current.style.top = `${30 + ratio * 20}%`;
-    };
+
     window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("scroll", handleScroll);
+      document.head.removeChild(styleSheet);
     };
   }, []);
 
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden style={{ zIndex: 0 }}>
+      {/* Blob 1 - Top Left */}
       <div
         ref={blob1Ref}
-        className="absolute rounded-full"
-        style={{
-          width: "560px", height: "560px",
-          top: "-10%", left: "-8%",
-          background: `radial-gradient(circle, ${tc.blob1} 0%, transparent 68%)`,
-          filter: "blur(55px)",
-          transition: "transform 0.18s ease-out",
-          opacity: theme === "white" ? 1 : 0.95,
-        }}
-      />
+        className="absolute transition-transform duration-300 ease-out" // Fast snap (300ms)
+        style={{ width: "65vw", height: "65vw", top: "-15%", left: "-10%" }}
+      >
+        <div 
+          className="blob-active w-full h-full rounded-full"
+          style={{
+            ["--duration" as any]: "8s", // Significantly faster cycle
+            background: `radial-gradient(circle, ${tc.blob1} 0%, transparent 70%)`,
+            filter: "blur(70px)",
+            opacity: theme === "white" ? 0.5 : 0.3,
+          }}
+        />
+      </div>
+
+      {/* Blob 2 - Center Right */}
       <div
         ref={blob2Ref}
-        className="absolute rounded-full"
-        style={{
-          width: "460px", height: "460px",
-          top: "30%", right: "-6%",
-          background: `radial-gradient(circle, ${tc.blob2} 0%, transparent 68%)`,
-          filter: "blur(68px)",
-          transition: "transform 0.25s ease-out",
-          opacity: 0.9,
-        }}
-      />
+        className="absolute transition-transform duration-400 ease-out"
+        style={{ width: "55vw", height: "55vw", top: "20%", right: "-15%" }}
+      >
+        <div 
+          className="blob-active w-full h-full rounded-full"
+          style={{
+            ["--duration" as any]: "10s",
+            background: `radial-gradient(circle, ${tc.blob2} 0%, transparent 70%)`,
+            filter: "blur(80px)",
+            opacity: 0.3,
+          }}
+        />
+      </div>
+
+      {/* Blob 3 - Bottom Left */}
       <div
         ref={blob3Ref}
-        className="absolute rounded-full"
-        style={{
-          width: "400px", height: "400px",
-          bottom: "5%", left: "45%",
-          background: `radial-gradient(circle, ${tc.blob3} 0%, transparent 68%)`,
-          filter: "blur(75px)",
-          transition: "transform 0.32s ease-out",
-          opacity: theme === "white" ? 0.8 : 0.82,
-        }}
-      />
+        className="absolute transition-transform duration-500 ease-out"
+        style={{ width: "50vw", height: "50vw", bottom: "-5%", left: "20%" }}
+      >
+        <div 
+          className="blob-active w-full h-full rounded-full"
+          style={{
+            ["--duration" as any]: "7s",
+            background: `radial-gradient(circle, ${tc.blob3} 0%, transparent 70%)`,
+            filter: "blur(90px)",
+            opacity: theme === "white" ? 0.4 : 0.25,
+          }}
+        />
+      </div>
     </div>
   );
 }

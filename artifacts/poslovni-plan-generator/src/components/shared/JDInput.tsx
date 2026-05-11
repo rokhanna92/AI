@@ -1,51 +1,119 @@
+import { useState } from "react";
 import type { ThemeConfig } from "../../types";
-import { FONT } from "../../lib/constants";
 
 interface JDInputProps {
   label?: string;
   value: string | number;
   onChange: (v: string) => void;
   type?: string;
+  currency?: boolean;
   placeholder?: string;
   hint?: string;
   className?: string;
   tc: ThemeConfig;
 }
 
-export function JDInput({ label, value, onChange, type = "text", placeholder, hint, className = "", tc }: JDInputProps) {
+const VD = "Verdana, 'Trebuchet MS', Geneva, sans-serif";
+
+function fmtSrb(n: number): string {
+  return n !== 0
+    ? n.toLocaleString("sr-RS", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    : "";
+}
+
+export function JDInput({
+  label,
+  value,
+  onChange,
+  type = "text",
+  currency = false,
+  placeholder,
+  hint,
+  className = "",
+  tc,
+}: JDInputProps) {
+  const [focused, setFocused] = useState(false);
+  const [localRaw, setLocalRaw] = useState("");
+
+  const numVal = typeof value === "number" ? value : parseFloat(String(value)) || 0;
+
+  const ph =
+    placeholder ??
+    (label ? `Unesite ${label.charAt(0).toLowerCase()}${label.slice(1)}` : "");
+
+  const inputValue = currency ? (focused ? localRaw : fmtSrb(numVal)) : value;
+  const hasValue = currency ? numVal !== 0 : value !== "" && value !== 0;
+
+  const handleFocus = () => {
+    if (currency) setLocalRaw(numVal !== 0 ? String(numVal) : "");
+    setFocused(true);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (currency) {
+      setLocalRaw(e.target.value.replace(/[^0-9.,]/g, ""));
+    } else {
+      onChange(e.target.value);
+    }
+  };
+
+  const handleBlur = () => {
+    if (currency) {
+      const parsed = parseFloat(localRaw.replace(/\./g, "").replace(",", ".")) || 0;
+      onChange(String(parsed));
+      setLocalRaw("");
+    }
+    setFocused(false);
+  };
+
   return (
     <div className={`w-full ${className}`}>
       {label && (
         <label
-          className="block mb-1 uppercase tracking-[0.18em] text-[10px] font-semibold"
-          style={{ color: tc.accentDim, fontFamily: FONT.mono }}
+          className="block mb-2 text-[11px] font-bold"
+          style={{
+            color: focused ? tc.inputFocusBorder : tc.textSecondary,
+            fontFamily: VD,
+            letterSpacing: "0.02em",
+            transition: "color 0.15s",
+          }}
         >
           {label}
         </label>
       )}
+
       <input
-        type={type}
-        value={value}
-        onChange={e => onChange(e.target.value)}
-        placeholder={placeholder ?? "—"}
-        className="w-full bg-transparent px-0 py-2 text-sm transition-all focus:outline-none"
+        type={currency ? "text" : type}
+        inputMode={currency ? "decimal" : undefined}
+        value={inputValue}
+        onChange={handleChange}
+        placeholder={focused && currency ? "" : ph}
+        className="w-full bg-transparent py-2 text-[13px] font-bold focus:outline-none transition-all"
         style={{
           color: tc.inputText,
-          borderBottom: `1px solid ${tc.inputBorder}`,
-          fontFamily: type === "number" ? FONT.mono : FONT.sans,
-          letterSpacing: type === "number" ? "0.05em" : undefined,
+          fontFamily: VD,
+          border: "none",
+          caretColor: tc.inputFocusBorder,
+          borderBottom: focused
+            ? `2px solid ${tc.inputFocusBorder}`
+            : `2px solid transparent`,
         }}
-        onFocus={e => {
-          e.target.style.borderBottomColor = tc.inputFocusBorder;
-          e.target.style.boxShadow = tc.inputFocusShadow;
-        }}
-        onBlur={e => {
-          e.target.style.borderBottomColor = tc.inputBorder;
-          e.target.style.boxShadow = "none";
-        }}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
       />
+
+      {!hasValue && !focused && (
+        <div
+          className="h-px w-full"
+          style={{ background: tc.inputBorder, opacity: 0.3, marginTop: "-2px" }}
+        />
+      )}
+
       {hint && (
-        <p className="text-xs mt-1" style={{ color: tc.inputHint, fontFamily: FONT.mono }}>
+        <p
+          className="mt-1.5 text-[11px]"
+          style={{ color: tc.inputHint, fontFamily: VD }}
+        >
           {hint}
         </p>
       )}

@@ -1,5 +1,13 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+
+/* Verdana placeholder — subtle across all JDInput / JDTextarea fields */
+input::placeholder,
+textarea::placeholder {
+  font-family: Verdana, "Trebuchet MS", Geneva, sans-serif;
+  font-weight: 400;
+  opacity: 0.38;
+}
 @plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));

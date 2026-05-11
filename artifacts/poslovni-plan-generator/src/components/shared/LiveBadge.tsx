@@ -15,7 +15,7 @@ export function LiveBadge({ label, value, hi = false, tc }: LiveBadgeProps) {
       style={{
         background: hi ? tc.liveBadgeHiBg : tc.liveBadgeBg,
         border: `1px solid ${hi ? tc.liveBadgeHiBorder : tc.liveBadgeBorder}`,
-        boxShadow: hi ? tc.liveBadgeHiShadow : "none",
+        boxShadow: "none",
       }}
     >
       {hi && (
@@ -26,7 +26,7 @@ export function LiveBadge({ label, value, hi = false, tc }: LiveBadgeProps) {
       )}
       <span
         className="uppercase tracking-[0.18em] text-[9px] font-semibold"
-        style={{ color: hi ? tc.liveBadgeHiLabel : tc.liveBadgeLabel, fontFamily: FONT.mono }}
+        style={{ color: hi ? tc.liveBadgeHiLabel : tc.liveBadgeLabel, fontFamily: FONT.sans }}
       >
         {label}
       </span>
@@ -34,8 +34,8 @@ export function LiveBadge({ label, value, hi = false, tc }: LiveBadgeProps) {
         className="font-black text-base leading-tight"
         style={{
           color: hi ? tc.liveBadgeHiValue : tc.liveBadgeValue,
-          fontFamily: FONT.mono,
-          textShadow: hi ? `0 0 12px ${tc.liveBadgeHiGlow}` : `0 0 8px ${tc.liveBadgeValue}40`,
+          fontFamily: FONT.sans,
+          textShadow: "none",
         }}
       >
         {value}

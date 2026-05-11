@@ -10,7 +10,7 @@ interface ThemeSwitcherProps {
 
 export function ThemeSwitcher({ theme, setTheme, tc }: ThemeSwitcherProps) {
   const themes: { key: ThemeKey; label: string; icon: React.ReactNode }[] = [
-    { key: "white", label: "", icon: <Sun size={12} style={{ color: tc.heroTitle3 }} /> },
+    { key: "white", label: "", icon: <Sun size={12} /> },
     { key: "yellow", label: "", icon: <Leaf size={12} /> },
   ];
 

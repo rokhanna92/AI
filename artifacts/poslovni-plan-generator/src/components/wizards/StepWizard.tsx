@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, FileDown, CheckCircle2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, FileDown, CheckCircle2, Loader2 } from "lucide-react";
 import type { StepDef, ThemeConfig } from "../../types";
 import { FONT } from "../../lib/constants";
 
@@ -7,12 +7,14 @@ interface StepWizardProps {
   currentStep: number;
   setCurrentStep: (n: number) => void;
   children: React.ReactNode;
-  onFinish: () => void;
+  onFinish: () => void | Promise<void>;
   onBack: () => void;
   tc: ThemeConfig;
+  canProceed?: boolean;
+  isGenerating?: boolean;
 }
 
-export function StepWizard({ steps, currentStep, setCurrentStep, children, onFinish, onBack, tc }: StepWizardProps) {
+export function StepWizard({ steps, currentStep, setCurrentStep, children, onFinish, onBack, tc, canProceed = true, isGenerating = false }: StepWizardProps) {
   return (
     <div>
       {/* HUD Timeline */}
@@ -111,20 +113,24 @@ export function StepWizard({ steps, currentStep, setCurrentStep, children, onFin
 
         {currentStep < steps.length - 1 ? (
           <button
-            onClick={() => setCurrentStep(currentStep + 1)}
+            onClick={() => canProceed && setCurrentStep(currentStep + 1)}
+            disabled={!canProceed}
             className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all"
             style={{
-              background: tc.btnPrimaryBg,
-              border: `1px solid ${tc.btnPrimaryBorder}`,
-              color: tc.btnPrimaryText,
-              boxShadow: `0 0 20px ${tc.accent}1a`,
+              background: canProceed ? tc.btnPrimaryBg : "rgba(128,128,128,0.12)",
+              border: `1px solid ${canProceed ? tc.btnPrimaryBorder : "rgba(128,128,128,0.2)"}`,
+              color: canProceed ? tc.btnPrimaryText : "rgba(128,128,128,0.5)",
+              boxShadow: canProceed ? `0 0 20px ${tc.accent}1a` : "none",
               fontFamily: FONT.sans,
+              cursor: canProceed ? "pointer" : "not-allowed",
             }}
             onMouseEnter={e => {
+              if (!canProceed) return;
               (e.currentTarget as HTMLElement).style.background = tc.btnPrimaryHoverBg;
               (e.currentTarget as HTMLElement).style.boxShadow = `0 0 30px ${tc.accent}33`;
             }}
             onMouseLeave={e => {
+              if (!canProceed) return;
               (e.currentTarget as HTMLElement).style.background = tc.btnPrimaryBg;
               (e.currentTarget as HTMLElement).style.boxShadow = `0 0 20px ${tc.accent}1a`;
             }}
@@ -133,24 +139,33 @@ export function StepWizard({ steps, currentStep, setCurrentStep, children, onFin
           </button>
         ) : (
           <button
-            onClick={onFinish}
+            onClick={isGenerating ? undefined : onFinish}
+            disabled={isGenerating}
             className="flex items-center gap-2 px-8 py-2.5 rounded-xl text-sm font-black transition-all relative overflow-hidden"
             style={{
-              background: "linear-gradient(135deg, rgba(255,222,0,0.9), rgba(229,200,0,0.9))",
-              color: "#0a2206",
-              boxShadow: "0 0 30px rgba(255,222,0,0.25), inset 0 1px 0 rgba(255,255,255,0.3)",
-              border: "1px solid rgba(255,222,0,0.6)",
+              background: isGenerating
+                ? "rgba(128,128,128,0.15)"
+                : "linear-gradient(135deg, rgba(255,222,0,0.9), rgba(229,200,0,0.9))",
+              color: isGenerating ? "rgba(128,128,128,0.6)" : "#0a2206",
+              boxShadow: isGenerating ? "none" : "0 0 30px rgba(255,222,0,0.25), inset 0 1px 0 rgba(255,255,255,0.3)",
+              border: isGenerating ? "1px solid rgba(128,128,128,0.2)" : "1px solid rgba(255,222,0,0.6)",
               fontFamily: FONT.sans,
+              cursor: isGenerating ? "not-allowed" : "pointer",
             }}
             onMouseEnter={e => {
+              if (isGenerating) return;
               (e.currentTarget as HTMLElement).style.boxShadow = "0 0 50px rgba(255,222,0,0.4), inset 0 1px 0 rgba(255,255,255,0.3)";
             }}
             onMouseLeave={e => {
+              if (isGenerating) return;
               (e.currentTarget as HTMLElement).style.boxShadow = "0 0 30px rgba(255,222,0,0.25), inset 0 1px 0 rgba(255,255,255,0.3)";
             }}
           >
-            <FileDown size={16} />
-            Generiši PDF
+            {isGenerating ? (
+              <><Loader2 size={16} className="animate-spin" /> AI генерише…</>
+            ) : (
+              <><FileDown size={16} /> Generiši PDF</>
+            )}
           </button>
         )}
       </div>

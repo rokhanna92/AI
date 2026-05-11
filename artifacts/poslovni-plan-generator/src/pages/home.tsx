@@ -137,16 +137,7 @@ export default function AgroPlanApp() {
           </div>
         )}
       </main>
-
-      {/* Floating profile toggle (home only) */}
-      {path === "home" && (
-        <FloatingProfileButton
-          active={showProfile}
-          onClick={() => setShowProfile(prev => !prev)}
-          tc={tc}
-        />
-      )}
-
+        
       <Footer tc={tc} />
     </div>
   );

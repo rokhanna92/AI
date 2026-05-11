@@ -1,0 +1,82 @@
+{
+  "cover": {
+    "naziv_plana": "",
+    "investitor": "",
+    "mesto_realizacije": "",
+    "godina": "2026"
+  },
+
+  "rezime_poslovnog_plana": {
+    "1.1": { "naziv": "Назив", "vrednost": "" },
+    "1.2": { "naziv": "Инвеститор", "vrednost": "" },
+    "1.3": { "naziv": "Локација", "vrednost": "" },
+
+    "2.1": { "naziv": "Укупна улагања (са ПДВ)", "vrednost": 0 },
+    "2.2": { "naziv": "Улагања у основна средства", "vrednost": 0 },
+    "2.3": { "naziv": "Улагања у обртна средства", "vrednost": null },
+
+    "3.1": { "naziv": "Укупни извори финансирања", "vrednost": 0 },
+    "3.2": { "naziv": "Сопствени извори", "vrednost": 0 },
+    "3.3": { "naziv": "Туђи извори", "vrednost": 0 },
+
+    "4.1": { "naziv": "Намена", "vrednost": "" },
+    "4.2": { "naziv": "Почетак инвестирања", "vrednost": "" },
+    "4.3": { "naziv": "Завршетак инвестирања", "vrednost": "" },
+    "4.4": { "naziv": "Економски век пројекта", "vrednost": "" },
+    "4.5": { "naziv": "Тржиште продаје", "vrednost": "" },
+
+    "5.1": { "naziv": "Економичност", "vrednost": 0 },
+    "5.2": { "naziv": "Акумулативност", "vrednost": 0 },
+    "5.3": { "naziv": "Рентабилност", "vrednost": 0 },
+    "5.4": { "naziv": "Време повраћаја инвестиције", "vrednost": "" },
+    "5.5": { "naziv": "Укупна ангажованост радне снаге", "vrednost": "" }
+  },
+
+  "podaci": {
+    "tabela21": {
+      "imeNaziv": "",
+      "sediste": "",
+      "mesto": "",
+      "pib": "",
+      "maticniBroj": "",
+      "sifraDelatnosti": "",
+      "telefon": "",
+      "email": ""
+    },
+    "tabela22": {
+      "adresaGazdinstva": "",
+      "bpg": "",
+      "datumRegistracije": "",
+      "brojZaposlenih": 0
+    },
+    "tabela23": {
+      "vlasnistvo_m2": 0,
+      "zakup_m2": 0,
+      "ustupljeno_m2": 0
+    },
+    "opisAktivnosti": ""
+  },
+
+  "investicija": {
+    "namena": "",
+    "pocetak": "",
+    "zavrsetak": "",
+    "ekonomskiVek": 10,
+    "osnSredstva": [],
+    "sopstvenaProcenat": 40
+  },
+
+  "prihodi": {
+    "kulture": [],
+    "proizvodi": []
+  },
+
+  "troskovi": {
+    "materijalni": { "sirovine": 0, "ambalaza": 0, "ostali": 0 },
+    "energija":    { "struja": 0, "voda": 0, "ostala": 0 },
+    "usluge":      { "odrzavanje": 0, "ostale": 0 },
+    "amortizacija": [],
+    "radnaSnaga":  { "broj": 0, "godisnjiTrosak": 0 },
+    "nematerijalni": { "banka": 0, "osiguranje": 0, "ostali": 0 }
+  }
+}

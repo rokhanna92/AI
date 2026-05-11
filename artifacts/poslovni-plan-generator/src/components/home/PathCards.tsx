@@ -148,7 +148,7 @@ export function PathCards({ tc, onSelect }: PathCardsProps) {
         </h3>
         <div
           className="text-[9px] uppercase tracking-[0.2em] mb-3 font-bold"
-          style={{ color: `${tc.heroTitle3}80`, fontFamily: FONT.mono }}
+          style={{ color: `${tc.path3Glow}80`, fontFamily: FONT.mono }}
         >
           Tab. 1.2 → 3.3 → 5.3
         </div>
@@ -157,7 +157,7 @@ export function PathCards({ tc, onSelect }: PathCardsProps) {
         </p>
         <span
           className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest"
-          style={{ color: tc.heroTitle3, fontFamily: FONT.mono }}
+          style={{ color: tc.path3Glow, fontFamily: FONT.mono }}
         >
           Pokreni <ChevronRight size={13} />
         </span>

@@ -133,14 +133,6 @@ export const TYPO = {
   } as React.CSSProperties,
 } as const;
 
-export const JD = {
-  green: "#367C2B", greenDark: "#244F1C", greenLight: "#4A9E3A",
-  greenPale: "#EBF5E8", greenMid: "#D4EBD0",
-  yellow: "#FFDE00", yellowDark: "#E5C800", yellowPale: "#FFFBCC",
-  black: "#1A1A1A", gray900: "#1F2937", gray700: "#374151",
-  gray500: "#6B7280", gray300: "#D1D5DB", gray100: "#F3F4F6",
-  white: "#FFFFFF", red: "#DC2626", redPale: "#FEF2F2",
-};
 
 export const GLOBAL_INIT: GlobalProfile = {
   gazdinstvoName: "PG Petrović",
@@ -156,85 +148,154 @@ export const GLOBAL_INIT: GlobalProfile = {
 };
 
 export const PATH1_INIT: Path1State = {
-  parcels: [
-    { id: "l1", katMunicipality: "Sombor", parcelNumber: "3421/1", area: 8.5, ownership: "Sopstveno", crop: "Kukuruz" },
-    { id: "l2", katMunicipality: "Sombor", parcelNumber: "3421/2", area: 4.2, ownership: "Sopstveno", crop: "Soja" },
-  ],
-  livestock: [
-    { id: "lv1", name: "Goveda (tov)", qty: 20, valuePerHead: 150000 },
-    { id: "lv2", name: "Svinje", qty: 50, valuePerHead: 35000 },
-  ],
-  buildings: [
-    { id: "b1", name: "Staja za goveda", area: 400, value: 3200000 },
-    { id: "b2", name: "Magacin za žitarice", area: 200, value: 1500000 },
-  ],
-  machinery: [
-    { id: "m1", name: "Traktor IMT 577", qty: 1, value: 1800000 },
-    { id: "m2", name: "Kombajn CLAAS", qty: 1, value: 4500000 },
-  ],
-  landValue: 5200000,
-  buildingValue: 4700000,
-  livestockValue: 4750000,
-  equipmentValue: 6300000,
-  investmentItems: [
-    { id: "i1", name: "Sistem navodnjavanja (pump stanica)", unit: "kom", qty: 1, priceNet: 850000 },
-    { id: "i2", name: "PE cevi za navodnjavanje dn110", unit: "m", qty: 600, priceNet: 1200 },
-    { id: "i3", name: "Kap-kap laterale sa kapaljkama", unit: "m", qty: 8500, priceNet: 85 },
-    { id: "i4", name: "Elektro-ventili i kontroler", unit: "kom", qty: 4, priceNet: 45000 },
-  ],
-  ownFunds: 800000,
-  revenueYears: [1800000, 2100000, 2400000, 2700000, 3000000],
+  tabela11: {
+    naziv: "",
+    investitor: "",
+    lokacija: "",
+  },
+  tabela21: {
+    imeNaziv: "",
+    sediste: "",
+    mesto: "",
+    pib: "",
+    maticniBroj: "",
+    sifraDelatnosti: "",
+    telefon: "",
+    email: "",
+  },
+  tabela22: {
+    adresaGazdinstva: "",
+    bpg: "",
+    datumRegistracije: "",
+    brojZaposlenih: 0,
+  },
+  tabela23: { vlasnistvo_m2: 0, zakup_m2: 0, ustupljeno_m2: 0 },
+
+  kulture: [],
+  opisAktivnosti: "",
+
+  namenaInvesticije: "",
+  pocetakInvesticije: "",
+  zavrsetakInvesticije: "",
+  ekonomskiVek: 10,
+  osnSredstva: [],
+  sopstvenaProcenat: 40,
+
+  proizvodi: [],
+
+  trosak_sirovine: 0,
+  trosak_ambalaza: 0,
+  trosak_ostaliMat: 0,
+  trosak_struja: 0,
+  trosak_voda: 0,
+  trosak_ostalaEn: 0,
+  trosak_odrzavanje: 0,
+  trosak_ostaleUsl: 0,
+  amortizacija: [],
+  radnaSnaga_broj: 0,
+  radnaSnaga_godisnjiTrosak: 0,
+  trosak_banka: 0,
+  trosak_osiguranje: 0,
+  trosak_ostaliNemat: 0,
 };
 
 export const PATH2_INIT: Path2State = {
-  opisPoslovneIdeje: "Kupovina opreme i proširenje kapaciteta",
-  analizaProdajnog: "Lokalno tržište i izvoz",
-  analizaNabavnog: "Domaći dobavljači repromaterijala",
-  products: [
-    { name: "Pšenica (klasa A)", unitPrice: 32, qty: [320000, 350000, 380000, 400000, 420000] },
-    { name: "Suncokret", unitPrice: 95, qty: [80000, 90000, 100000, 110000, 120000] },
-    { name: "Kukuruz (krmni)", unitPrice: 28, qty: [200000, 220000, 240000, 260000, 280000] },
-  ],
-  materialCosts: { seeds: 280000, fertilizer: 420000, chemicals: 150000 },
-  energyCosts: { fuel: 180000, electricity: 45000 },
-  nonMaterialCosts: { insurance: 85000, accounting: 60000, registration: 12000 },
-  workers: 3,
-  monthlyWage: 85000,
-  totalInvestment: 2800000,
+  // Step 0
+  nazivPlana: "", investitor: "", lokacija: "", godina: "2026",
+  namenaInvesticije: "", pocetakInvesticije: "", zavrsetakInvesticije: "",
+  ekonomskiVek: "10 godina", trzisteProdaje: "", angRaSnage: "",
+  sopstvenoUcescePct: 40,
+  // Step 1
+  adresaNosioca: "", mestoNosioca: "", jmbg: "", telefon: "", email: "",
+  bpg: "", datumRegistracije: "", vlasnistvo_ha: 0, zakup_ha: 0,
+  opisDelatnosti: "",
+  zem_oranice: 0, zem_livade: 0, zem_pasnjaci: 0, zem_vocnjaci: 0,
+  zem_vinogradi: 0, zem_sume: 0,
+  obj_kuca: 0, obj_staja: 0, obj_zivinjarnik: 0, obj_silos: 0,
+  obj_ambar: 0, obj_garaza: 0,
+  meh_traktor: 0, meh_kombajn: 0, meh_plug: 0, meh_tanjiraca: 0,
+  meh_drljaca: 0, meh_setoSpremac: 0, meh_sejalica: 0, meh_kultivator: 0,
+  meh_rasipacMin: 0, meh_rasipacStaj: 0, meh_prskAlica: 0,
+  meh_beracKukuruza: 0, meh_prikolica: 0,
+  stoc_krave: 0, stoc_svinje: 0, stoc_ovce: 0, stoc_koze: 0,
+  stoc_zivina: 0, stoc_konji: 0, stoc_kunici: 0, stoc_kosnice: 0,
+  // Step 2
+  opisProizvodnog: "", opisProsirenjaPrograma: "",
+  opisTrzisteNabavke: "", opisTrzisteProadaje: "",
+  opisRadneSnage: "", opisDistribucije: "",
+  efektProsirenjeAsortimana: false, efektNoviProizvod: false,
+  efektUnapredjenje: false, efektPovecZaposlenosti: false,
+  efektPovecPrihoda: false,
+  // Step 3
+  predmetCiljInvesticije: "",
+  unetaOsnovnaI: 0, unetaObratnaI: 0,
+  osnSredstvaP2: [], obrtnaInvesticija: 0,
+  tudjIzvoriOpis: "", tudjIzvoriIznos: 0,
+  // Step 4
+  proizvodi: [],
+  // Step 5
+  direktanMaterijal: [], komunalni: [], usluge: [],
+  amortizacija: [], radnaSnaga: [], nematerijalni: [],
+  // Step 6
+  rizici: [], zakljucak: "",
 };
 
 export const PATH3_INIT: Path3State = {
-  katMunicipality: "Sombor",
-  hectares: 12.4,
-  existingPumps: "1× električna pumpa 5.5 kW",
-  existingTractors: "1× IMT 577 DV",
-  existingTools: "Atomizer, prikolica 5t",
-  items: [
-    { id: "ir1", name: "Pumpa stanica frekventna", unit: "kom", qty: 1, price: 620000 },
-    { id: "ir2", name: "Kap-kap laterale (Netafim)", unit: "m", qty: 12400, price: 92 },
-    { id: "ir3", name: "Filteri disk (120 mesh)", unit: "kom", qty: 3, price: 28000 },
-    { id: "ir4", name: "Montaža i puštanje u rad", unit: "paušal", qty: 1, price: 185000 },
-  ],
-  revenueYears: [1600000, 1900000, 2200000, 2500000, 2800000],
-  expenseYears: [920000, 950000, 980000, 1010000, 1040000],
+  investitor: "", nazivPlana: "", lokacija: "", godina: "2026",
+  namenaInvesticije: "", pocetakInvesticije: "", zavrsetakInvesticije: "",
+  ekonomskiVek: "10 godina", trzisteProdaje: "Domaće", angRaSnage: "",
+  sopstvenoUcescePct: 40,
+  ulicaBroj: "", mesto: "", jmbgMb: "", telefon: "", email: "",
+  bpg: "", datumRegistracije: "",
+  primarnaDelatnost: "", sekundarnaDelatnost: "", brojUposlenih: "",
+  katOpstina: "", katParcele: "", povrsina_ha: 0, lokVlasnistvo_ha: 0, lokZakup_ha: 0,
+  vlasnistvo_ha: 0, zakup_ha: 0,
+  opisDelatnosti: "",
+  zem_oranice: 0, zem_livade: 0, zem_pasnjaci: 0, zem_vocnjaci: 0,
+  zem_vinogradi: 0, zem_sume: 0,
+  obj_kuca: 0, obj_staja: 0, obj_zivinjarnik: 0, obj_silos: 0,
+  obj_ambar: 0, obj_garaza: 0,
+  meh_traktor: 0, meh_kombajn: 0, meh_plug: 0, meh_tanjiraca: 0,
+  meh_drljaca: 0, meh_setoSpremac: 0, meh_sejalica: 0, meh_kultivator: 0,
+  meh_rasipacMin: 0, meh_rasipacStaj: 0, meh_prskAlica: 0,
+  meh_beracKukuruza: 0, meh_prikolica: 0,
+  stoc_krave: 0, stoc_svinje: 0, stoc_ovce: 0, stoc_koze: 0,
+  stoc_zivina: 0, stoc_konji: 0, stoc_kunici: 0, stoc_kosnice: 0,
+  trzisteProdajeTekst: "", trzisteSnabdevanjaTekst: "",
+  opisPoslovneIdeje: "",
+  unetaOsnovnaI: 0, unetaObratnaI: 0, obrtnaInvesticija: 0,
+  osnSredstvaP3: [], tudjIzvoriOpis: "",
+  proizvodi: [],
+  direktanMaterijal: [], energijaGorivo: [],
+  amortizacijaP3: [], radnaSnagaVanjska: [],
+  zakljucak: "",
 };
 
 export const PATH1_STEPS: StepDef[] = [
-  { id: "res", label: "Resursi", icon: "🚜", tableRef: "Tab 1.1–1.4" },
-  { id: "val", label: "Vrednost", icon: "💰", tableRef: "Tab 1.5" },
-  { id: "inv", label: "Investicija", icon: "🏗", tableRef: "Tab 3.2" },
-  { id: "fin", label: "Finansije", icon: "📊", tableRef: "Tab 3.3–5.1" },
+  { id: "cover",      label: "Naslovna",    icon: "📋", tableRef: "Tabela 1.1" },
+  { id: "entity",     label: "Podaci",      icon: "🏢", tableRef: "Tab 2.1–2.3" },
+  { id: "production", label: "Proizvodnja", icon: "🌾", tableRef: "Tekuće stanje" },
+  { id: "investment", label: "Investicija", icon: "🏗", tableRef: "Tab 4.3–4.4" },
+  { id: "revenue",    label: "Prihodi",     icon: "📈", tableRef: "Tabela 8.1" },
+  { id: "costs",      label: "Troškovi",    icon: "📉", tableRef: "Tab 8.2.1–8.2.6" },
 ];
 
 export const PATH2_STEPS: StepDef[] = [
-  { id: "idea", label: "Ideja", icon: "💡", tableRef: "Sekcija 3" },
-  { id: "rev", label: "Prihodi", icon: "📈", tableRef: "Tabela 8.1" },
-  { id: "exp", label: "Rashodi", icon: "📉", tableRef: "Tabela 8.2" },
-  { id: "eval", label: "Ocena", icon: "⚖️", tableRef: "Tabela 9" },
+  { id: "rezime",      label: "1. Rezime",     icon: "📋", tableRef: "Sekcija 1" },
+  { id: "gazdinstvo",  label: "2. Gazdinstvo", icon: "🏠",  tableRef: "Sekcija 2" },
+  { id: "opis",        label: "3. Opis",       icon: "📝", tableRef: "Sekcija 3" },
+  { id: "investicija", label: "4. Investic.",  icon: "🏗",  tableRef: "Sekcija 4" },
+  { id: "efekti",      label: "5-6-7",         icon: "👥", tableRef: "Sekc. 5–7" },
+  { id: "finansije",   label: "8. Finansije",  icon: "📊", tableRef: "Sekcija 8" },
+  { id: "zakljucak",   label: "10-11",         icon: "✅",  tableRef: "Sekc. 10–11" },
 ];
 
 export const PATH3_STEPS: StepDef[] = [
-  { id: "loc", label: "Lokacija", icon: "📍", tableRef: "Tabela 1.2" },
-  { id: "tech", label: "Tehnika", icon: "💧", tableRef: "Tabela 3.3" },
-  { id: "eff", label: "Efikasnost", icon: "📊", tableRef: "Tabela 5.3" },
+  { id: "rezime",     label: "1. Rezime",      icon: "📋", tableRef: "Naslovna" },
+  { id: "gazdinstvo", label: "2. Gazdinstvo",  icon: "🏠",  tableRef: "Tab 1.1–1.2" },
+  { id: "posed",      label: "3. Posed",       icon: "🗺️",  tableRef: "Tab 1.3–1.5" },
+  { id: "trziste",    label: "4. Tržište/Inv", icon: "💧", tableRef: "Sek 2–3" },
+  { id: "prihodi",    label: "5. Prihodi",     icon: "📈", tableRef: "Tab 4.1" },
+  { id: "troskovi",   label: "6. Troškovi",    icon: "📉", tableRef: "Tab 4.2" },
+  { id: "zakljucak",  label: "7. Ocena",       icon: "✅",  tableRef: "Sek 5–6" },
 ];

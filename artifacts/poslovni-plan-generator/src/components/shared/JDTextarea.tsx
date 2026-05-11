@@ -1,5 +1,5 @@
+import { useState } from "react";
 import type { ThemeConfig } from "../../types";
-import { FONT } from "../../lib/constants";
 
 interface JDTextareaProps {
   label?: string;
@@ -7,35 +7,74 @@ interface JDTextareaProps {
   onChange: (v: string) => void;
   rows?: number;
   hint?: string;
+  placeholder?: string;
   tc: ThemeConfig;
 }
 
-export function JDTextarea({ label, value, onChange, rows = 3, hint, tc }: JDTextareaProps) {
+const VD = "Verdana, 'Trebuchet MS', Geneva, sans-serif";
+
+export function JDTextarea({
+  label,
+  value,
+  onChange,
+  rows = 4,
+  hint,
+  placeholder,
+  tc,
+}: JDTextareaProps) {
+  const [focused, setFocused] = useState(false);
+
+  const ph = placeholder ?? (label
+    ? `Unesite ${label.charAt(0).toLowerCase()}${label.slice(1)}...`
+    : "");
+
   return (
     <div className="w-full">
       {label && (
         <label
-          className="block mb-1 uppercase tracking-[0.18em] text-[10px] font-semibold"
-          style={{ color: tc.accentDim, fontFamily: FONT.mono }}
+          className="block mb-2 text-[11px] font-bold"
+          style={{
+            color: focused ? tc.inputFocusBorder : tc.textSecondary,
+            fontFamily: VD,
+            letterSpacing: "0.02em",
+            transition: "color 0.15s",
+          }}
         >
           {label}
         </label>
       )}
+
       <textarea
         value={value}
         onChange={e => onChange(e.target.value)}
+        placeholder={ph}
         rows={rows}
-        className="w-full bg-transparent px-0 py-2 text-sm transition-all focus:outline-none resize-none"
+        className="w-full bg-transparent py-2 text-[13px] font-bold focus:outline-none resize-none transition-all"
         style={{
           color: tc.inputText,
-          borderBottom: `1px solid ${tc.inputBorder}`,
-          fontFamily: FONT.sans,
+          fontFamily: VD,
+          border: "none",
+          caretColor: tc.inputFocusBorder,
+          borderBottom: focused
+            ? `2px solid ${tc.inputFocusBorder}`
+            : `2px solid transparent`,
         }}
-        onFocus={e => { e.target.style.borderBottomColor = tc.inputFocusBorder; }}
-        onBlur={e => { e.target.style.borderBottomColor = tc.inputBorder; }}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
       />
+
+      {!value && !focused && (
+        <div
+          className="h-px w-full"
+          style={{ background: tc.inputBorder, opacity: 0.3, marginTop: "-2px" }}
+        />
+      )}
+
       {hint && (
-        <p className="text-xs mt-1 italic" style={{ color: tc.inputHint }}>
+        <p
+          className="mt-1.5 text-[11px]"
+          style={{ color: tc.inputHint, fontFamily: VD }}
+        >
           {hint}
         </p>
       )}
