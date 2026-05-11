@@ -18,7 +18,7 @@ export function calcPath1(s: Path1State) {
     ),
   );
 
-  // Cost categories
+  // Cost for categories
   const trosak82_1 = s.trosak_sirovine + s.trosak_ambalaza + s.trosak_ostaliMat;
   const trosak82_2 = s.trosak_struja + s.trosak_voda + s.trosak_ostalaEn;
   const trosak82_3 = s.trosak_odrzavanje + s.trosak_ostaleUsl;
