@@ -151,9 +151,9 @@ async function callGemini(prompt: string, apiKey: string, model: string): Promis
 
 export async function generateIPARDContent(s: Path1State): Promise<IPARDAIContent> {
   const groqKey     = (import.meta.env.VITE_GROQ_API_KEY   as string | undefined) ?? "";
-  const groqModel   = (import.meta.env.VITE_GROQ_MODEL     as string | undefined) ?? "llama-3.3-70b-versatile";
+  const groqModel   = (import.meta.env.VITE_GROQ_MODEL     as string | undefined) || "llama-3.3-70b-versatile";
   const geminiKey   = (import.meta.env.VITE_GEMINI_API_KEY as string | undefined) ?? "";
-  const geminiModel = (import.meta.env.VITE_GEMINI_MODEL   as string | undefined) ?? "gemini-2.0-flash";
+  const geminiModel = (import.meta.env.VITE_GEMINI_MODEL   as string | undefined) || "gemini-2.0-flash";
 
   if (!groqKey && !geminiKey) {
     console.warn("[AI] Нема постављеног API кључа.");
@@ -284,9 +284,9 @@ function buildPath2Prompt(s: Path2State): string {
 
 export async function generatePath2Content(s: Path2State): Promise<Path2AIContent> {
   const groqKey     = (import.meta.env.VITE_GROQ_API_KEY   as string | undefined) ?? "";
-  const groqModel   = (import.meta.env.VITE_GROQ_MODEL     as string | undefined) ?? "llama-3.3-70b-versatile";
+  const groqModel   = (import.meta.env.VITE_GROQ_MODEL     as string | undefined) || "llama-3.3-70b-versatile";
   const geminiKey   = (import.meta.env.VITE_GEMINI_API_KEY as string | undefined) ?? "";
-  const geminiModel = (import.meta.env.VITE_GEMINI_MODEL   as string | undefined) ?? "gemini-2.0-flash";
+  const geminiModel = (import.meta.env.VITE_GEMINI_MODEL   as string | undefined) || "gemini-2.0-flash";
 
   if (!groqKey && !geminiKey) {
     console.warn("[AI] Нема постављеног API кључа.");
@@ -400,9 +400,9 @@ function buildPath3Prompt(s: Path3State): string {
 
 export async function generatePath3Content(s: Path3State): Promise<Path3AIContent> {
   const groqKey     = (import.meta.env.VITE_GROQ_API_KEY   as string | undefined) ?? "";
-  const groqModel   = (import.meta.env.VITE_GROQ_MODEL     as string | undefined) ?? "llama-3.3-70b-versatile";
+  const groqModel   = (import.meta.env.VITE_GROQ_MODEL     as string | undefined) || "llama-3.3-70b-versatile";
   const geminiKey   = (import.meta.env.VITE_GEMINI_API_KEY as string | undefined) ?? "";
-  const geminiModel = (import.meta.env.VITE_GEMINI_MODEL   as string | undefined) ?? "gemini-2.0-flash";
+  const geminiModel = (import.meta.env.VITE_GEMINI_MODEL   as string | undefined) || "gemini-2.0-flash";
 
   if (!groqKey && !geminiKey) {
     console.warn("[AI] Нема постављеног API кључа.");
