@@ -50,14 +50,6 @@ export default defineConfig({
       strict: true,
       deny: ["**/.*"],
     },
-    proxy: {
-      // Groq proxy — avoids CORS when VITE_AI_PROVIDER=groq
-      "/groq-proxy": {
-        target: "https://api.groq.com",
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/groq-proxy/, "/openai/v1"),
-      },
-    },
   },
   preview: {
     port,

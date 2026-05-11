@@ -108,29 +108,8 @@ function buildPrompt(s: Path1State): string {
 }`;
 }
 
-async function callGemini(prompt: string, apiKey: string, model: string): Promise<string> {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-  console.log("[Gemini] Позивам модел:", model);
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: { temperature: 0.6, maxOutputTokens: 4000 },
-    }),
-  });
-  if (!res.ok) {
-    const body = await res.text().catch(() => "");
-    throw new Error(`Gemini ${res.status}: ${body}`);
-  }
-  const json = await res.json();
-  return json.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
-}
-
-// Via Vite proxy to avoid CORS.
 async function callGroq(prompt: string, apiKey: string, model: string): Promise<string> {
-  console.log("[Groq] Позивам модел:", model);
-  const res = await fetch("/groq-proxy/chat/completions", {
+  const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -151,30 +130,47 @@ async function callGroq(prompt: string, apiKey: string, model: string): Promise<
   return json.choices?.[0]?.message?.content ?? "";
 }
 
+async function callGemini(prompt: string, apiKey: string, model: string): Promise<string> {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+  console.log("[Gemini] Позивам модел:", model);
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: { temperature: 0.6, maxOutputTokens: 4000 },
+    }),
+  });
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw new Error(`Gemini ${res.status}: ${body}`);
+  }
+  const json = await res.json();
+  return json.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+}
+
 export async function generateIPARDContent(s: Path1State): Promise<IPARDAIContent> {
-  const geminiKey  = (import.meta.env.VITE_GEMINI_API_KEY as string | undefined) ?? "";
-  const geminiModel = (import.meta.env.VITE_GEMINI_MODEL  as string | undefined) ?? "gemini-2.0-flash";
-  const groqKey    = (import.meta.env.VITE_GROQ_API_KEY   as string | undefined) ?? "";
-  const groqModel  = (import.meta.env.VITE_GROQ_MODEL     as string | undefined) ?? "llama-3.3-70b-versatile";
+  const groqKey     = (import.meta.env.VITE_GROQ_API_KEY   as string | undefined) ?? "";
+  const groqModel   = (import.meta.env.VITE_GROQ_MODEL     as string | undefined) ?? "llama-3.3-70b-versatile";
+  const geminiKey   = (import.meta.env.VITE_GEMINI_API_KEY as string | undefined) ?? "";
+  const geminiModel = (import.meta.env.VITE_GEMINI_MODEL   as string | undefined) ?? "gemini-2.0-flash";
+
+  if (!groqKey && !geminiKey) {
+    console.warn("[AI] Нема постављеног API кључа.");
+    return AI_PLACEHOLDER;
+  }
 
   const prompt = buildPrompt(s);
   let raw = "";
 
-  if (geminiKey) {
-    try {
+  try {
+    if (groqKey) {
+      raw = await callGroq(prompt, groqKey, groqModel);
+    } else {
       raw = await callGemini(prompt, geminiKey, geminiModel);
-    } catch (geminiErr) {
-      console.warn("[AI] Gemini није успео, покушавам Groq:", geminiErr);
-      if (groqKey) {
-        raw = await callGroq(prompt, groqKey, groqModel);
-      } else {
-        throw geminiErr;
-      }
     }
-  } else if (groqKey) {
-    raw = await callGroq(prompt, groqKey, groqModel);
-  } else {
-    console.warn("[AI] Нема постављеног API кључа. Додај VITE_GEMINI_API_KEY или VITE_GROQ_API_KEY у .env");
+  } catch (err) {
+    console.error("[AI] Грешка:", err);
     return AI_PLACEHOLDER;
   }
 
@@ -287,29 +283,27 @@ function buildPath2Prompt(s: Path2State): string {
 }
 
 export async function generatePath2Content(s: Path2State): Promise<Path2AIContent> {
-  const geminiKey   = (import.meta.env.VITE_GEMINI_API_KEY as string | undefined) ?? "";
-  const geminiModel = (import.meta.env.VITE_GEMINI_MODEL   as string | undefined) ?? "gemini-2.0-flash";
   const groqKey     = (import.meta.env.VITE_GROQ_API_KEY   as string | undefined) ?? "";
   const groqModel   = (import.meta.env.VITE_GROQ_MODEL     as string | undefined) ?? "llama-3.3-70b-versatile";
+  const geminiKey   = (import.meta.env.VITE_GEMINI_API_KEY as string | undefined) ?? "";
+  const geminiModel = (import.meta.env.VITE_GEMINI_MODEL   as string | undefined) ?? "gemini-2.0-flash";
+
+  if (!groqKey && !geminiKey) {
+    console.warn("[AI] Нема постављеног API кључа.");
+    return PATH2_AI_PLACEHOLDER;
+  }
 
   const prompt = buildPath2Prompt(s);
   let raw = "";
 
-  if (geminiKey) {
-    try {
+  try {
+    if (groqKey) {
+      raw = await callGroq(prompt, groqKey, groqModel);
+    } else {
       raw = await callGemini(prompt, geminiKey, geminiModel);
-    } catch (geminiErr) {
-      console.warn("[AI] Gemini није успео, покушавам Groq:", geminiErr);
-      if (groqKey) {
-        raw = await callGroq(prompt, groqKey, groqModel);
-      } else {
-        throw geminiErr;
-      }
     }
-  } else if (groqKey) {
-    raw = await callGroq(prompt, groqKey, groqModel);
-  } else {
-    console.warn("[AI] Нема постављеног API кључа. Текст ће бити placeholder.");
+  } catch (err) {
+    console.error("[AI] Грешка:", err);
     return PATH2_AI_PLACEHOLDER;
   }
 
@@ -405,29 +399,27 @@ function buildPath3Prompt(s: Path3State): string {
 }
 
 export async function generatePath3Content(s: Path3State): Promise<Path3AIContent> {
-  const geminiKey   = (import.meta.env.VITE_GEMINI_API_KEY as string | undefined) ?? "";
-  const geminiModel = (import.meta.env.VITE_GEMINI_MODEL   as string | undefined) ?? "gemini-2.0-flash";
   const groqKey     = (import.meta.env.VITE_GROQ_API_KEY   as string | undefined) ?? "";
   const groqModel   = (import.meta.env.VITE_GROQ_MODEL     as string | undefined) ?? "llama-3.3-70b-versatile";
+  const geminiKey   = (import.meta.env.VITE_GEMINI_API_KEY as string | undefined) ?? "";
+  const geminiModel = (import.meta.env.VITE_GEMINI_MODEL   as string | undefined) ?? "gemini-2.0-flash";
+
+  if (!groqKey && !geminiKey) {
+    console.warn("[AI] Нема постављеног API кључа.");
+    return PATH3_AI_PLACEHOLDER;
+  }
 
   const prompt = buildPath3Prompt(s);
   let raw = "";
 
-  if (geminiKey) {
-    try {
+  try {
+    if (groqKey) {
+      raw = await callGroq(prompt, groqKey, groqModel);
+    } else {
       raw = await callGemini(prompt, geminiKey, geminiModel);
-    } catch (geminiErr) {
-      console.warn("[AI] Gemini није успео, покушавам Groq:", geminiErr);
-      if (groqKey) {
-        raw = await callGroq(prompt, groqKey, groqModel);
-      } else {
-        throw geminiErr;
-      }
     }
-  } else if (groqKey) {
-    raw = await callGroq(prompt, groqKey, groqModel);
-  } else {
-    console.warn("[AI] Нема постављеног API кључа.");
+  } catch (err) {
+    console.error("[AI] Грешка:", err);
     return PATH3_AI_PLACEHOLDER;
   }
 
