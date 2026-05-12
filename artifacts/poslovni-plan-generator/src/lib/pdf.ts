@@ -2290,7 +2290,7 @@ export function generatePath2PDF(profile: GlobalProfile, s: Path2State) {
   const longDash = "-".repeat(96);
   setN(9);
   doc.text(shortDash, cw / 2, 38, { align: "center" });
-  doc.text("Име и презиме", cw / 2, 43, { align: "center" });
+  doc.text(s.investitor || "Име и презиме", cw / 2, 43, { align: "center" });
   setB(14);
   doc.text("П О С Л О В Н И  П Л А Н", cw / 2, 128, { align: "center" });
   setN(9);
@@ -2925,11 +2925,9 @@ export function generatePath2PDF(profile: GlobalProfile, s: Path2State) {
 
   checkPage(20);
   setB(11);
-  doc.text(
-    "6.   ДИСТРИБУЦИЈА И ПРОМОЦИЈА (КАНАЛИ ДИСТРИБУЦИЈЕ И НАЧИН РЕКЛАМИРАЊА)",
-    ML,
-    y,
-  );
+  doc.text("6.   ДИСТРИБУЦИЈА И ПРОМОЦИЈА", ML, y);
+  y += 6;
+  doc.text("      (КАНАЛИ ДИСТРИБУЦИЈЕ И НАЧИН РЕКЛАМИРАЊА)", ML, y);
   y += 6;
   instrText(
     "(Опишите на који начин планирате да ваше производе рекламирате код купаца и на који начин намеравате да ваше производе учините доступним својим потенцијалним купцима (директна продаја на газдинству, продаја преко малопродајних објеката, продаја преко велепродаја и дистрибутера и др.)",

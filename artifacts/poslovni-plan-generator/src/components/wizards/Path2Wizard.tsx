@@ -34,6 +34,159 @@ import {
 
 const STORAGE_KEY = "agro-plan-path2-state";
 
+function uid() { return Math.random().toString(36).slice(2, 9); }
+
+function CurrencyCell({
+  value,
+  onChange,
+  style,
+  className,
+}: {
+  value: number;
+  onChange: (v: number) => void;
+  style?: React.CSSProperties;
+  className?: string;
+}) {
+  const [focused, setF] = useState(false);
+  const [raw, setRaw] = useState("");
+  const fmt = (n: number) =>
+    n !== 0
+      ? n.toLocaleString("sr-RS", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      : "";
+  return (
+    <input
+      type="text"
+      inputMode="decimal"
+      className={className}
+      style={style}
+      value={focused ? raw : fmt(value)}
+      placeholder={focused ? "" : "0"}
+      onFocus={() => { setRaw(value !== 0 ? String(value) : ""); setF(true); }}
+      onChange={(e) => setRaw(e.target.value.replace(/[^0-9.,]/g, ""))}
+      onBlur={() => {
+        setF(false);
+        onChange(parseFloat(raw.replace(/\./g, "").replace(",", ".")) || 0);
+      }}
+    />
+  );
+}
+
+function CostTable({
+  rows,
+  onChange,
+  tc,
+}: {
+  rows: CostRowP2[];
+  onChange: (r: CostRowP2[]) => void;
+  tc: ThemeConfig;
+}) {
+  const cell: React.CSSProperties = {
+    background: "transparent",
+    color: tc.tableCellText,
+    fontFamily: FONT.sans,
+    fontSize: "0.72rem",
+    border: "none",
+    outline: "none",
+    width: "100%",
+  };
+  const cellN: React.CSSProperties = {
+    ...cell,
+    color: tc.tableNumText,
+    fontFamily: FONT.mono,
+    fontWeight: 700,
+    textAlign: "right",
+  };
+  const rowBorder = `1px solid ${tc.tableRowBorder}`;
+  const addRow = () => onChange([...rows, { id: uid(), naziv: "", poGodinama: [0, 0, 0, 0, 0] }]);
+  const del = (id: string) => onChange(rows.filter((r) => r.id !== id));
+  const updRow = (id: string, k: "naziv" | number, v: string | number) =>
+    onChange(
+      rows.map((r) => {
+        if (r.id !== id) return r;
+        if (k === "naziv") return { ...r, naziv: v as string };
+        const pg = [...r.poGodinama] as [number, number, number, number, number];
+        pg[k as number] = v as number;
+        return { ...r, poGodinama: pg };
+      }),
+    );
+  return (
+    <div>
+      <div className="overflow-x-auto">
+        <table className="w-full text-xs" style={{ borderCollapse: "collapse" }}>
+          <THead
+            cols={["Naziv troška / stavke", "God. I", "God. II", "God. III", "God. IV", "God. V", ""]}
+            tc={tc}
+          />
+          <tbody>
+            {rows.map((r) => (
+              <tr key={r.id} style={{ borderBottom: rowBorder }}>
+                <td className="px-3 py-1.5" style={{ minWidth: 180 }}>
+                  <input
+                    style={cell}
+                    value={r.naziv}
+                    onChange={(e) => updRow(r.id, "naziv", e.target.value)}
+                    placeholder="Naziv..."
+                  />
+                </td>
+                {r.poGodinama.map((v, qi) => (
+                  <td key={qi} className="px-2 py-1.5" style={{ width: 96 }}>
+                    <CurrencyCell
+                      value={v}
+                      onChange={(nv) => updRow(r.id, qi, nv)}
+                      className="w-full focus:outline-none"
+                      style={cellN}
+                    />
+                  </td>
+                ))}
+                <td className="px-2 py-1.5" style={{ width: 32 }}>
+                  <button
+                    onClick={() => del(r.id)}
+                    style={{ color: tc.textMuted }}
+                    onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "#f87171")}
+                    onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = tc.textMuted)}
+                  >
+                    <Trash2 size={12} />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+          {rows.length > 0 && (
+            <tfoot>
+              <tr style={{ borderTop: `2px solid ${tc.tableRowBorder}` }}>
+                <td className="px-3 py-1.5 text-xs font-bold" style={{ color: tc.tableCellText, fontFamily: FONT.sans }}>
+                  Ukupno
+                </td>
+                {[0, 1, 2, 3, 4].map((yr) => (
+                  <td key={yr} className="px-2 py-1.5 text-right text-xs font-bold" style={{ color: tc.highlight, fontFamily: FONT.mono }}>
+                    {fmtRSD(rows.reduce((a, r) => a + r.poGodinama[yr], 0))}
+                  </td>
+                ))}
+                <td />
+              </tr>
+            </tfoot>
+          )}
+        </table>
+      </div>
+      <button
+        onClick={addRow}
+        className="mt-3 flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs transition-all"
+        style={{ color: tc.addRowText, border: `1px dashed ${tc.addRowBorder}`, fontFamily: FONT.sans }}
+        onMouseEnter={(e) => {
+          (e.currentTarget as HTMLElement).style.color = tc.addRowHoverText;
+          (e.currentTarget as HTMLElement).style.background = tc.addRowHoverBg;
+        }}
+        onMouseLeave={(e) => {
+          (e.currentTarget as HTMLElement).style.color = tc.addRowText;
+          (e.currentTarget as HTMLElement).style.background = "transparent";
+        }}
+      >
+        <Plus size={11} /> Dodaj stavku
+      </button>
+    </div>
+  );
+}
+
 interface Props {
   profile: GlobalProfile;
   onBack: () => void;
@@ -97,188 +250,8 @@ export function Path2Wizard({ profile, onBack, tc }: Props) {
     textAlign: "right",
   };
   const rowBorder = `1px solid ${tc.tableRowBorder}`;
-  const uid = () => Math.random().toString(36).slice(2, 9);
   const up = <K extends keyof Path2State>(k: K, v: Path2State[K]) =>
     setS((p) => ({ ...p, [k]: v }));
-
-  // Currency input
-  function CurrencyCell({
-    value,
-    onChange,
-    style,
-    className,
-  }: {
-    value: number;
-    onChange: (v: number) => void;
-    style?: React.CSSProperties;
-    className?: string;
-  }) {
-    const [focused, setF] = useState(false);
-    const [raw, setRaw] = useState("");
-    const fmt = (n: number) =>
-      n !== 0
-        ? n.toLocaleString("sr-RS", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          })
-        : "";
-    return (
-      <input
-        type="text"
-        inputMode="decimal"
-        className={className}
-        style={style}
-        value={focused ? raw : fmt(value)}
-        placeholder={focused ? "" : "0"}
-        onFocus={() => {
-          setRaw(value !== 0 ? String(value) : "");
-          setF(true);
-        }}
-        onChange={(e) => setRaw(e.target.value.replace(/[^0-9.,]/g, ""))}
-        onBlur={() => {
-          setF(false);
-          onChange(parseFloat(raw.replace(/\./g, "").replace(",", ".")) || 0);
-        }}
-      />
-    );
-  }
-
-  // Per-year cost table (8.2.1–8.2.3, 8.2.5–8.2.6)
-  function CostTable({
-    rows,
-    onChange,
-  }: {
-    rows: CostRowP2[];
-    onChange: (r: CostRowP2[]) => void;
-  }) {
-    const addRow = () =>
-      onChange([
-        ...rows,
-        { id: uid(), naziv: "", poGodinama: [0, 0, 0, 0, 0] },
-      ]);
-    const del = (id: string) => onChange(rows.filter((r) => r.id !== id));
-    const updRow = (id: string, k: "naziv" | number, v: string | number) =>
-      onChange(
-        rows.map((r) => {
-          if (r.id !== id) return r;
-          if (k === "naziv") return { ...r, naziv: v as string };
-          const pg = [...r.poGodinama] as [
-            number,
-            number,
-            number,
-            number,
-            number,
-          ];
-          pg[k as number] = v as number;
-          return { ...r, poGodinama: pg };
-        }),
-      );
-    return (
-      <div>
-        <div className="overflow-x-auto">
-          <table
-            className="w-full text-xs"
-            style={{ borderCollapse: "collapse" }}
-          >
-            <THead
-              cols={[
-                "Naziv troška / stavke",
-                "God. I",
-                "God. II",
-                "God. III",
-                "God. IV",
-                "God. V",
-                "",
-              ]}
-              tc={tc}
-            />
-            <tbody>
-              {rows.map((r) => (
-                <tr key={r.id} style={{ borderBottom: rowBorder }}>
-                  <td className="px-3 py-1.5" style={{ minWidth: 180 }}>
-                    <input
-                      style={cell}
-                      value={r.naziv}
-                      onChange={(e) => updRow(r.id, "naziv", e.target.value)}
-                      placeholder="Naziv..."
-                    />
-                  </td>
-                  {r.poGodinama.map((v, qi) => (
-                    <td key={qi} className="px-2 py-1.5" style={{ width: 96 }}>
-                      <CurrencyCell
-                        value={v}
-                        onChange={(nv) => updRow(r.id, qi, nv)}
-                        className="w-full focus:outline-none"
-                        style={cellN}
-                      />
-                    </td>
-                  ))}
-                  <td className="px-2 py-1.5" style={{ width: 32 }}>
-                    <button
-                      onClick={() => del(r.id)}
-                      style={{ color: tc.textMuted }}
-                      onMouseEnter={(e) =>
-                        ((e.currentTarget as HTMLElement).style.color =
-                          "#f87171")
-                      }
-                      onMouseLeave={(e) =>
-                        ((e.currentTarget as HTMLElement).style.color =
-                          tc.textMuted)
-                      }
-                    >
-                      <Trash2 size={12} />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-            {rows.length > 0 && (
-              <tfoot>
-                <tr style={{ borderTop: `2px solid ${tc.tableRowBorder}` }}>
-                  <td
-                    className="px-3 py-1.5 text-xs font-bold"
-                    style={{ color: tc.tableCellText, fontFamily: FONT.sans }}
-                  >
-                    Ukupno
-                  </td>
-                  {[0, 1, 2, 3, 4].map((yr) => (
-                    <td
-                      key={yr}
-                      className="px-2 py-1.5 text-right text-xs font-bold"
-                      style={{ color: tc.highlight, fontFamily: FONT.mono }}
-                    >
-                      {fmtRSD(rows.reduce((a, r) => a + r.poGodinama[yr], 0))}
-                    </td>
-                  ))}
-                  <td />
-                </tr>
-              </tfoot>
-            )}
-          </table>
-        </div>
-        <button
-          onClick={addRow}
-          className="mt-3 flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs transition-all"
-          style={{
-            color: tc.addRowText,
-            border: `1px dashed ${tc.addRowBorder}`,
-            fontFamily: FONT.sans,
-          }}
-          onMouseEnter={(e) => {
-            (e.currentTarget as HTMLElement).style.color = tc.addRowHoverText;
-            (e.currentTarget as HTMLElement).style.background =
-              tc.addRowHoverBg;
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLElement).style.color = tc.addRowText;
-            (e.currentTarget as HTMLElement).style.background = "transparent";
-          }}
-        >
-          <Plus size={11} /> Dodaj stavku
-        </button>
-      </div>
-    );
-  }
 
   // canProceed
   const canProceed: Record<number, boolean> = {
@@ -2128,6 +2101,7 @@ export function Path2Wizard({ profile, onBack, tc }: Props) {
             <CostTable
               rows={s.direktanMaterijal}
               onChange={(v) => up("direktanMaterijal", v)}
+              tc={tc}
             />
           </Card>
 
@@ -2148,6 +2122,7 @@ export function Path2Wizard({ profile, onBack, tc }: Props) {
             <CostTable
               rows={s.komunalni}
               onChange={(v) => up("komunalni", v)}
+              tc={tc}
             />
           </Card>
 
@@ -2166,7 +2141,7 @@ export function Path2Wizard({ profile, onBack, tc }: Props) {
               ostalih osnovnih sredstava, zakupnine prostora, troškove
               reklamiranja itd.)
             </p>
-            <CostTable rows={s.usluge} onChange={(v) => up("usluge", v)} />
+            <CostTable rows={s.usluge} onChange={(v) => up("usluge", v)} tc={tc} />
           </Card>
 
           {/* 8.2.4 Amortizacija */}
@@ -2360,6 +2335,7 @@ export function Path2Wizard({ profile, onBack, tc }: Props) {
             <CostTable
               rows={s.radnaSnaga}
               onChange={(v) => up("radnaSnaga", v)}
+              tc={tc}
             />
           </Card>
 
@@ -2379,6 +2355,7 @@ export function Path2Wizard({ profile, onBack, tc }: Props) {
             <CostTable
               rows={s.nematerijalni}
               onChange={(v) => up("nematerijalni", v)}
+              tc={tc}
             />
           </Card>
           {s.proizvodi.length > 0 && (

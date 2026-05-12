@@ -60,7 +60,7 @@ export function Header({ theme, setTheme, tc, path }: HeaderProps) {
               className="ml-2 align-middle"
               style={{ ...TYPO.labelXxs, color: tc.logoVersionText }}
             >
-              v3.9
+              v4.0
             </span>
           </div>
         </div>

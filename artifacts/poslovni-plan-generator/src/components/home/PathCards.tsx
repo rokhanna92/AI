@@ -22,12 +22,14 @@ export function PathCards({ tc, onSelect }: PathCardsProps) {
           border: `1px solid ${tc.path1Border}`,
           backdropFilter: "blur(20px)",
         }}
-        onMouseEnter={e => {
-          (e.currentTarget as HTMLElement).style.borderColor = tc.path1HoverBorder;
-          (e.currentTarget as HTMLElement).style.boxShadow = tc.path1HoverShadow;
+        onMouseEnter={(e) => {
+          (e.currentTarget as HTMLElement).style.borderColor =
+            tc.path1HoverBorder;
+          (e.currentTarget as HTMLElement).style.boxShadow =
+            tc.path1HoverShadow;
           (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
         }}
-        onMouseLeave={e => {
+        onMouseLeave={(e) => {
           (e.currentTarget as HTMLElement).style.borderColor = tc.path1Border;
           (e.currentTarget as HTMLElement).style.boxShadow = tc.cardShadow;
           (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
@@ -35,7 +37,9 @@ export function PathCards({ tc, onSelect }: PathCardsProps) {
       >
         <div
           className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity"
-          style={{ background: `linear-gradient(90deg, transparent, ${tc.path1GlowLine}, transparent)` }}
+          style={{
+            background: `linear-gradient(90deg, transparent, ${tc.path1GlowLine}, transparent)`,
+          }}
         />
         <img
           src={euFlag}
@@ -43,8 +47,11 @@ export function PathCards({ tc, onSelect }: PathCardsProps) {
           className="w-auto opacity-80 h-[130px] object-contain"
           style={{ display: "block", margin: "auto", marginBottom: "3rem" }}
         />
-        <h3 className="text-lg font-black mb-1.5" style={{ color: tc.textPrimary, fontFamily: FONT.sans }}>
-          IPARD / Vojvodina
+        <h3
+          className="text-lg font-black mb-1.5"
+          style={{ color: tc.textPrimary, fontFamily: FONT.sans }}
+        >
+          Nabavka Mechanizacije
         </h3>
         <div
           className="text-[9px] uppercase tracking-[0.2em] mb-3 font-bold"
@@ -52,8 +59,13 @@ export function PathCards({ tc, onSelect }: PathCardsProps) {
         >
           Tab. 1.1 → 1.5 → 3.2 → 5.1
         </div>
-        <p className="text-xs leading-relaxed mb-5" style={{ color: tc.textMuted, fontFamily: FONT.sans }}>
-          Putanja za velike investicije i ruralni razvoj. Fokusirana na modernizaciju poljoprivredne mehanizacije i infrastrukture kroz fondove EU standarda.
+        <p
+          className="text-xs leading-relaxed mb-5"
+          style={{ color: tc.textMuted, fontFamily: FONT.sans }}
+        >
+          Putanja za velike investicije i ruralni razvoj. Fokusirana na
+          modernizaciju poljoprivredne mehanizacije i infrastrukture kroz
+          fondove EU standarda.
         </p>
         <span
           className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest"
@@ -72,12 +84,14 @@ export function PathCards({ tc, onSelect }: PathCardsProps) {
           border: `1px solid ${tc.path2Border}`,
           backdropFilter: "blur(20px)",
         }}
-        onMouseEnter={e => {
-          (e.currentTarget as HTMLElement).style.borderColor = tc.path2HoverBorder;
-          (e.currentTarget as HTMLElement).style.boxShadow = tc.path2HoverShadow;
+        onMouseEnter={(e) => {
+          (e.currentTarget as HTMLElement).style.borderColor =
+            tc.path2HoverBorder;
+          (e.currentTarget as HTMLElement).style.boxShadow =
+            tc.path2HoverShadow;
           (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
         }}
-        onMouseLeave={e => {
+        onMouseLeave={(e) => {
           (e.currentTarget as HTMLElement).style.borderColor = tc.path2Border;
           (e.currentTarget as HTMLElement).style.boxShadow = tc.cardShadow;
           (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
@@ -85,7 +99,9 @@ export function PathCards({ tc, onSelect }: PathCardsProps) {
       >
         <div
           className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity"
-          style={{ background: `linear-gradient(90deg, transparent, ${tc.path2Glow}66, transparent)` }}
+          style={{
+            background: `linear-gradient(90deg, transparent, ${tc.path2Glow}66, transparent)`,
+          }}
         />
         <img
           src={sprout}
@@ -93,8 +109,11 @@ export function PathCards({ tc, onSelect }: PathCardsProps) {
           className="w-auto opacity-80 h-[130px] object-contain"
           style={{ display: "block", margin: "auto", marginBottom: "3rem" }}
         />
-        <h3 className="text-lg font-black mb-1.5" style={{ color: tc.textPrimary, fontFamily: FONT.sans }}>
-          Mladi Preduzetnik
+        <h3
+          className="text-lg font-black mb-1.5"
+          style={{ color: tc.textPrimary, fontFamily: FONT.sans }}
+        >
+          Mladi Poljoprivrednik
         </h3>
         <div
           className="text-[9px] uppercase tracking-[0.2em] mb-3 font-bold"
@@ -102,8 +121,13 @@ export function PathCards({ tc, onSelect }: PathCardsProps) {
         >
           Tab. 8.1 → 8.2 → Ocena 9
         </div>
-        <p className="text-xs leading-relaxed mb-5" style={{ color: tc.textMuted, fontFamily: FONT.sans }}>
-          Specijalizovana ruta za poljoprivrednike do 40 godina koji traže podršku za prvo osnivanje ili proširenje gazdinstva. Naglasak na modernom menadžmentu.
+        <p
+          className="text-xs leading-relaxed mb-5"
+          style={{ color: tc.textMuted, fontFamily: FONT.sans }}
+        >
+          Specijalizovana ruta za poljoprivrednike do 40 godina koji traže
+          podršku za prvo osnivanje ili proširenje gazdinstva. Naglasak na
+          modernom menadžmentu.
         </p>
         <span
           className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest"
@@ -122,12 +146,14 @@ export function PathCards({ tc, onSelect }: PathCardsProps) {
           border: `1px solid ${tc.path3Border}`,
           backdropFilter: "blur(20px)",
         }}
-        onMouseEnter={e => {
-          (e.currentTarget as HTMLElement).style.borderColor = tc.path3HoverBorder;
-          (e.currentTarget as HTMLElement).style.boxShadow = tc.path3HoverShadow;
+        onMouseEnter={(e) => {
+          (e.currentTarget as HTMLElement).style.borderColor =
+            tc.path3HoverBorder;
+          (e.currentTarget as HTMLElement).style.boxShadow =
+            tc.path3HoverShadow;
           (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
         }}
-        onMouseLeave={e => {
+        onMouseLeave={(e) => {
           (e.currentTarget as HTMLElement).style.borderColor = tc.path3Border;
           (e.currentTarget as HTMLElement).style.boxShadow = tc.cardShadow;
           (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
@@ -135,7 +161,9 @@ export function PathCards({ tc, onSelect }: PathCardsProps) {
       >
         <div
           className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity"
-          style={{ background: `linear-gradient(90deg, transparent, ${tc.path3Glow}66, transparent)` }}
+          style={{
+            background: `linear-gradient(90deg, transparent, ${tc.path3Glow}66, transparent)`,
+          }}
         />
         <img
           src={watering}
@@ -143,7 +171,10 @@ export function PathCards({ tc, onSelect }: PathCardsProps) {
           className="w-auto opacity-80 h-[130px] object-contain"
           style={{ display: "block", margin: "auto", marginBottom: "3rem" }}
         />
-        <h3 className="text-lg font-black mb-1.5" style={{ color: tc.textPrimary, fontFamily: FONT.sans }}>
+        <h3
+          className="text-lg font-black mb-1.5"
+          style={{ color: tc.textPrimary, fontFamily: FONT.sans }}
+        >
           Navodnjavanje
         </h3>
         <div
@@ -152,8 +183,12 @@ export function PathCards({ tc, onSelect }: PathCardsProps) {
         >
           Tab. 1.2 → 3.3 → 5.3
         </div>
-        <p className="text-xs leading-relaxed mb-5" style={{ color: tc.textMuted, fontFamily: FONT.sans }}>
-          Namenska automatizacija za sisteme upravljanja vodom, solarne pumpe i efikasnu infrastrukturu za hidrataciju useva.
+        <p
+          className="text-xs leading-relaxed mb-5"
+          style={{ color: tc.textMuted, fontFamily: FONT.sans }}
+        >
+          Namenska automatizacija za sisteme upravljanja vodom, solarne pumpe i
+          efikasnu infrastrukturu za hidrataciju useva.
         </p>
         <span
           className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest"
